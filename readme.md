@@ -137,12 +137,3 @@ CI Success → GitHub Actions →
 - Optional SBOM generation.
 
 ---
-
-## ✅ Summary
-
-- Terraform → infra (AKS, ACR, KeyVault, ingress, monitoring).  
-- Helm charts → declarative app + DB templates.  
-- CI/CD → builds images, pushes to ACR, deploys via Helm.  
-- Secrets → Key Vault mounted in cluster.  
-- Environments → separate Helm values per dev/stage/prod.  
-- Observability & security → Prometheus/Grafana, PodSecurity, HPA, logging.
