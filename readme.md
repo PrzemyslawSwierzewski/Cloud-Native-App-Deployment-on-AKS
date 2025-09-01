@@ -5,9 +5,9 @@
 - **Terraform (modular)** — owns cloud infra only:  
   Resource groups, VNet/subnets, AKS cluster + node pools, ACR, Key Vault, managed identities, LoadBalancer/Ingress (NGINX via Helm release), storage accounts, monitoring resources.
 
-- **Helm charts repo** — owns app manifests (frontend, backend, DB). Charts versioned and stored in Git or OCI registry.
+- **Helm charts repo** — owns app manifests (frontend, backend, DB). Charts versioned and stored in Git.
 
-- **CI/CD pipeline (GitHub Actions / Azure DevOps)** — builds container images, runs tests, pushes to ACR, and deploys updated images via Helm directly to AKS.
+- **CI/CD pipeline (GitHub Actions)** — builds container images, runs tests, pushes to ACR, and deploys updated images via Helm directly to AKS.
 
 - **Secrets** — managed in Azure Key Vault; referenced by Helm values or Kubernetes secrets.
 
