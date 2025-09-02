@@ -7,8 +7,3 @@ variable "environment" {
   })
   description = "Values for a single environment, including rg_name and tags"
 }
-
-variable "acr-sku" {
-    type = string
-    description = "Acr sku that was pulled from the root module"
-}
