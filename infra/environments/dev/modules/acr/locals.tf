@@ -1,3 +1,3 @@
 locals {
-    acr_name = "cloud-native-app-${var.environment.name}"
+    acr_name = "cloud_native_app_${var.environment.name}"
 }

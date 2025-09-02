@@ -1,9 +1,9 @@
 terraform {
 #   backend "remote" {
-#     organization = "personal-org-prem"
+#     organization = "personal_org_prem"
 
 #     workspaces {
-#       name = "cloud-native-project"
+#       name = "cloud_native_project"
 #     }
 #   }
   required_providers {
@@ -18,6 +18,10 @@ terraform {
 
 provider "azurerm" {
   features {
+    key_vault {
+      purge_soft_delete_on_destroy    = true
+      recover_soft_deleted_key_vaults = true
+    }
   }
   subscription_id = "0610cfd0-65fa-4a7a-9d82-582300455c0a"
 }

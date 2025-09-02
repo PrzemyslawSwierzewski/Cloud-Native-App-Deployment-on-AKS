@@ -1,19 +1,18 @@
-resource "azurerm_container_registry" "dev-acr" {
-  name                = "${local.environment.name}-container"
-  resource_group_name = var.rg_name
-  location            = var.location
-  sku                 = var.acr-sku
+resource "azurerm_container_registry" "dev_acr" {
+  name                = "${var.environment.name}container"
+  resource_group_name = var.environment.rg_name
+  location            = var.environment.location
+  sku                 = var.acr_sku
 
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.example.id // user assigned identity to be defined
+      var.user_assigned_identity_id
     ]
   }
 
   encryption {
-    key_vault_key_id   = data.azurerm_key_vault_key.example.id // key vault to be defined
-    identity_client_id = azurerm_user_assigned_identity.example.client_id // user assigned identity to be defined
+    key_vault_key_id   = var.key_vault_key_id
+    identity_client_id = var.user_assigned_identity_id
   }
-
 }
