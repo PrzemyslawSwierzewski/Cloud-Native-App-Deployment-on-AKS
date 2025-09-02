@@ -1,3 +1,3 @@
 output "vault_id_output" {
-  value = data.azurerm_key_vault.datakeyvault.id
+  value = azurerm_key_vault.devkeyvault.id
 }

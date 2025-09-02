@@ -11,27 +11,8 @@ resource "azurerm_key_vault" "devkeyvault" {
   rbac_authorization_enabled = true
 
   sku_name = var.sku_name_key_vault
-
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Get",
-      "List",
-      "Sign",
-      "Verify",
-      "WrapKey",
-      "UnwrapKey"
-    ]
-
-    secret_permissions = [
-      "Get",
-      "List"
-    ]
-
-    storage_permissions = [
-      "Get"
-    ]
+  
+  tags = {
+    Environment = var.environment.name
   }
 }
