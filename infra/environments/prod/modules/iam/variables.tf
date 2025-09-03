@@ -7,17 +7,17 @@ variable "environment" {
   description = "Values for a single environment, including rg_name and location and name of the environment"
 }
 
-variable "acr_sku" {
-    type = string
-    description = "Acr sku that was pulled from the root module"
+variable "key_vault_key_id" {
+  type        = string
+  description = "The ID of the Key Vault key"
 }
 
 variable "user_assigned_identity_id" {
   type        = string
-  description = "The ID of the user-assigned managed identity pulled from the iam module"
+  description = "The ID of the user-assigned managed identity"
 }
 
-variable "key_vault_key_id" {
+variable "kubernetes_cluster_id_principal_id" {
   type        = string
-  description = "The ID of the key vault key pulled from the keyvault module"
+  description = "The principal ID of the Kubernetes cluster"
 }

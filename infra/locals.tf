@@ -16,7 +16,7 @@ locals {
         environment = "Production"
       }
     }
-    staging = {
+    stage = {
       name = "stage"
       rg_name = "stage_cloud_native_app"
       location = "eastus"

@@ -14,3 +14,7 @@ variable "default_node_pool" {
     vm_size    = string
   })
 }
+
+variable "subnet_id" {
+  type = string
+}

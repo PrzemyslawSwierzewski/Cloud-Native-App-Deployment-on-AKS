@@ -1,4 +1,4 @@
-resource "azurerm_network_security_group" "dev_nsg" {
+resource "azurerm_network_security_group" "prod_nsg" {
   name                = "${var.environment.name}-nsg"
   location            = var.environment.location
   resource_group_name = var.environment.rg_name
@@ -23,11 +23,11 @@ resource "azurerm_network_security_group" "dev_nsg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "dev_nsg_assoc" {
+resource "azurerm_subnet_network_security_group_association" "prod_nsg_assoc" {
   subnet_id                 = var.subnet_id
-  network_security_group_id = azurerm_network_security_group.dev_nsg.id
+  network_security_group_id = azurerm_network_security_group.prod_nsg.id
 
   depends_on = [
-    azurerm_network_security_group.dev_nsg
+    azurerm_network_security_group.prod_nsg
   ]
 }

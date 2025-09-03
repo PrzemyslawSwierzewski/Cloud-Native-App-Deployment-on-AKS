@@ -8,7 +8,7 @@ resource "azurerm_kubernetes_cluster" "dev_cluster" {
     name       = var.default_node_pool.name
     node_count = var.default_node_pool.node_count
     vm_size    = var.default_node_pool.vm_size
-    //vnet_subnet_id  = azurerm_subnet.aks_subnet.id
+    vnet_subnet_id  = var.subnet_id
   }
 
   identity {
