@@ -17,7 +17,12 @@ variable "user_assigned_identity_id" {
   description = "The ID of the user-assigned managed identity pulled from the iam module"
 }
 
-variable "key_vault_key_id" {
+variable "vault_key_id" {
   type        = string
   description = "The ID of the key vault key pulled from the keyvault module"
+}
+
+variable "user_assigned_identity_name" {
+  type        = string
+  description = "The name of the user-assigned managed identity pulled from the iam module"
 }

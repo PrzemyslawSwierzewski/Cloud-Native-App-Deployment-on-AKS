@@ -1,4 +1,4 @@
-output securitygroupid {
-  value       = azurerm_network_security_group.dev_nsg.id
-  description = "description"
+output "nsg_id" {
+  value       = azurerm_network_security_group.prod_nsg.id
+  description = "Output ID of the production Network Security Group"
 }

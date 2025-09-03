@@ -7,7 +7,7 @@ variable "environment" {
   description = "Values for a single environment, including rg_name and location and name of the environment"
 }
 
-variable "key_vault_key_id" {
+variable "vault_key_id" {
   type        = string
   description = "The ID of the Key Vault key"
 }

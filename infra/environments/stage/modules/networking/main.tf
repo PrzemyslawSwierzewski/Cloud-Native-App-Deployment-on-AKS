@@ -20,5 +20,5 @@ resource "azurerm_subnet" "stage-subnet" {
 
 resource "azurerm_subnet_network_security_group_association" "stage-subnet-association" {
   subnet_id                 = azurerm_subnet.stage-subnet.id
-  network_security_group_id = var.securitygroupid
+  network_security_group_id = var.nsg_id
 }

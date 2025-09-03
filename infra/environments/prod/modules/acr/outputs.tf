@@ -1,4 +1,3 @@
-output environment {
-  value       = var.environment
-  description = "description"
+output "acr_id" {
+  value = azurerm_container_registry.prod_acr.id
 }

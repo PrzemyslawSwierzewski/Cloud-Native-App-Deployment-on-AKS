@@ -1,18 +1,29 @@
+# Fetch the Key Vault key
+data "azurerm_key_vault_key" "prod_key" {
+  name         = var.vault_key_id                # Name of the key inside Key Vault
+  key_vault_id = var.vault_key_id          # ID of the Key Vault itself
+}
+
+# Fetch the user-assigned identity
+data "azurerm_user_assigned_identity" "prod_identity" {
+  name                = var.user_assigned_identity_name
+  resource_group_name = var.environment.rg_name
+}
+
 resource "azurerm_container_registry" "prod_acr" {
   name                = "${var.environment.name}container"
   resource_group_name = var.environment.rg_name
   location            = var.environment.location
   sku                 = var.acr_sku
+  zone_redundancy_enabled = true
 
   identity {
-    type = "UserAssigned"
-    identity_ids = [
-      var.user_assigned_identity_id
-    ]
+    type         = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.prod_identity.id]
   }
 
   encryption {
-    key_vault_key_id   = var.key_vault_key_id
-    identity_client_id = var.user_assigned_identity_id
+    key_vault_key_id   = data.azurerm_key_vault_key.prod_key.id
+    identity_client_id = data.azurerm_user_assigned_identity.prod_identity.client_id
   }
 }

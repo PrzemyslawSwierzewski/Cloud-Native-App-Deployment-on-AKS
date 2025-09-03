@@ -7,7 +7,7 @@ variable "environment" {
   description = "Values for a single environment, including rg_name and location and name of the environment"
 }
 
-variable "securitygroupid" {
+variable "nsg_id" {
     type = string
     description = "Network security group id"
 }

@@ -20,5 +20,5 @@ resource "azurerm_subnet" "prod-subnet" {
 
 resource "azurerm_subnet_network_security_group_association" "prod-subnet-association" {
   subnet_id                 = azurerm_subnet.prod-subnet.id
-  network_security_group_id = var.securitygroupid
+  network_security_group_id = var.nsg_id
 }

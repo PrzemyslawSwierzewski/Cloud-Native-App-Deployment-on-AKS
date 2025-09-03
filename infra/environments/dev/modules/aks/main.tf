@@ -18,4 +18,9 @@ resource "azurerm_kubernetes_cluster" "dev_cluster" {
   tags = {
     Environment = var.environment.name
   }
+  lifecycle {
+    ignore_changes = [
+      tags, default_node_pool
+    ]
+  }
 }

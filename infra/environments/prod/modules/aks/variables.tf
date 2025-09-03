@@ -18,3 +18,11 @@ variable "default_node_pool" {
 variable "subnet_id" {
   type = string
 }
+
+variable "prod_aks_scaling_max_count" {
+  type = number
+}
+
+variable "prod_aks_scaling_min_count" {
+  type = number
+}

@@ -18,4 +18,10 @@ resource "azurerm_kubernetes_cluster" "stage_cluster" {
   tags = {
     Environment = var.environment.name
   }
+  
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
 }
