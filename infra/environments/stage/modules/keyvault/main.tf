@@ -1,7 +1,13 @@
 data "azurerm_client_config" "current" {}
 
+resource "random_string" "kv_suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
 resource "azurerm_key_vault" "stagekeyvault" {
-  name                        = "${var.environment.name}-key"
+  name                        = "kv-${var.environment.name}-${random_string.kv_suffix.result}"
   location                    = var.environment.location
   resource_group_name         = var.environment.rg_name
   enabled_for_disk_encryption = true

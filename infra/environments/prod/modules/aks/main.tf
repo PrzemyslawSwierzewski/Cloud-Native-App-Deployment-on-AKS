@@ -12,7 +12,7 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     auto_scaling_enabled = true
     min_count = var.prod_aks_scaling_min_count
     max_count = var.prod_aks_scaling_max_count
-    temporary_name_for_rotation = "${var.environment.name}-aks-temporary"
+    temporary_name_for_rotation = "${var.environment.name}temp"
     zones = ["1", "2", "3"]
   }
 

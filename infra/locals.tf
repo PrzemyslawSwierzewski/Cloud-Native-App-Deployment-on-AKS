@@ -5,7 +5,7 @@ locals {
       rg_name = "dev_cloud_native_app"
       location = "eastus"
       tags = {
-        environment = "Development"
+        environment = "development"
       }
     }
     prod = {
@@ -13,7 +13,7 @@ locals {
       rg_name = "prod_cloud_native_app"
       location = "eastus"
       tags = {
-        environment = "Production"
+        environment = "production"
       }
     }
     stage = {
@@ -21,7 +21,7 @@ locals {
       rg_name = "stage_cloud_native_app"
       location = "eastus"
       tags = {
-        environment = "Staging"
+        environment = "staging"
       }
     }
   }
