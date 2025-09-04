@@ -3,7 +3,7 @@ locals {
     dev = {
       name = "dev"
       rg_name = "dev_cloud_native_app"
-      location = "eastus"
+      location = "northeurope"
       tags = {
         environment = "development"
       }
@@ -11,7 +11,7 @@ locals {
     prod = {
       name = "prod"
       rg_name = "prod_cloud_native_app"
-      location = "eastus"
+      location = "northeurope"
       tags = {
         environment = "production"
       }
@@ -19,7 +19,7 @@ locals {
     stage = {
       name = "stage"
       rg_name = "stage_cloud_native_app"
-      location = "eastus"
+      location = "northeurope"
       tags = {
         environment = "staging"
       }

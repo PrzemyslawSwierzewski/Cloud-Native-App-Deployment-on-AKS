@@ -18,9 +18,16 @@ resource "azurerm_kubernetes_cluster" "dev_cluster" {
   tags = {
     Environment = var.environment.name
   }
+
   lifecycle {
     ignore_changes = [
       tags, default_node_pool
     ]
+  }
+
+  network_profile {
+    network_plugin     = "azure"
+    service_cidr       = "10.1.0.0/16"      # non-overlapping with VNet
+    dns_service_ip     = "10.1.0.10"        # inside service_cidr
   }
 }

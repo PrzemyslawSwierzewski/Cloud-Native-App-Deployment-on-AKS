@@ -18,6 +18,7 @@ module "dev_security" {
   environment = local.environments.dev
   subnet_id = module.dev_networking.subnet_id
 
+  depends_on = [azurerm_resource_group.infra_rgs]
 }
 
 module "dev_aks" {
@@ -71,6 +72,7 @@ module "prod_security" {
   environment = local.environments.prod
   subnet_id = module.prod_networking.subnet_id
 
+  depends_on = [azurerm_resource_group.infra_rgs]
 }
 
 module "prod_aks" {
@@ -139,6 +141,7 @@ module "stage_security" {
   environment = local.environments.stage
   subnet_id = module.stage_networking.subnet_id
 
+  depends_on = [azurerm_resource_group.infra_rgs]
 }
 
 module "stage_aks" {

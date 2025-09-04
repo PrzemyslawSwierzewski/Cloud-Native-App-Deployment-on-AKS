@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     min_count = var.prod_aks_scaling_min_count
     max_count = var.prod_aks_scaling_max_count
     temporary_name_for_rotation = "${var.environment.name}temp"
-    zones = ["1", "2", "3"]
+    zones = ["3"]
   }
 
   identity {
@@ -29,4 +29,11 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
       tags, default_node_pool
     ]
   }
+
+  network_profile {
+    network_plugin     = "azure"
+    service_cidr       = "10.1.0.0/16"      # non-overlapping with VNet
+    dns_service_ip     = "10.1.0.10"        # inside service_cidr
+  }
+
 }
