@@ -19,7 +19,7 @@ variable "default_node_pool_prod" {
   default = {
     name       = "nodepool"
     node_count = 1
-    vm_size    = "standard_a2_v2"
+    vm_size    = "Standard_B2s"
   }
 }
 
@@ -31,14 +31,14 @@ variable "default_node_pool_dev_stage" {
   })
   default = {
     name       = "nodepool"
-    node_count = 2
-    vm_size    = "standard_a2_v2"
+    node_count = 1
+    vm_size    = "Standard_B2s"
   }
 }
 
 variable "prod_aks_scaling_max_count" {
   type = number
-  default = 5
+  default = 1
 }
 
 variable "prod_aks_scaling_min_count" {

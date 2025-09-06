@@ -1,6 +1,6 @@
 # Fetch the Key Vault key
 data "azurerm_key_vault_key" "dev_key" {
-  name         = var.vault_key_id                # Name of the key inside Key Vault
+  name         = var.key_vault_name              # Name of the key inside Key Vault
   key_vault_id = var.vault_key_id           # ID of the Key Vault itself
 }
 

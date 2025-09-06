@@ -17,17 +17,12 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [var.user_assigned_identity_id]
   }
 
   tags = {
     Environment = var.environment.name
-  }
-
-  lifecycle {
-    ignore_changes = [
-      tags, default_node_pool
-    ]
   }
 
   network_profile {

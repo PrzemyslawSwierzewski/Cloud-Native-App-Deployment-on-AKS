@@ -26,3 +26,10 @@ resource "azurerm_key_vault" "stagekeyvault" {
   }
 }
 
+resource "azurerm_role_assignment" "tf_keyvault_access" {
+  scope                = azurerm_key_vault.stagekeyvault.id
+  role_definition_name = "Key Vault Secrets User" # or "Key Vault Crypto User" if you're using keys
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+

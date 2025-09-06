@@ -1,15 +1,3 @@
-# Fetch the Key Vault key
-data "azurerm_key_vault_key" "prod_key" {
-  name         = var.vault_key_id                # Name of the key inside Key Vault
-  key_vault_id = var.vault_key_id          # ID of the Key Vault itself
-}
-
-# Fetch the user-assigned identity
-data "azurerm_user_assigned_identity" "prod_identity" {
-  name                = var.user_assigned_identity_name
-  resource_group_name = var.environment.rg_name
-}
-
 resource "azurerm_container_registry" "prod_acr" {
   name                = "${var.environment.name}container"
   resource_group_name = var.environment.rg_name
@@ -19,11 +7,23 @@ resource "azurerm_container_registry" "prod_acr" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.prod_identity.id]
+    identity_ids = [var.user_assigned_identity_id]
   }
 
-  encryption {
-    key_vault_key_id   = data.azurerm_key_vault_key.prod_key.id
-    identity_client_id = data.azurerm_user_assigned_identity.prod_identity.client_id
+  dynamic "encryption" {
+    for_each = var.key_vault_key_id != null ? [1] : []
+    content {
+      key_vault_key_id   = var.key_vault_key_id
+      identity_client_id = var.user_assigned_identity_client_id
+    }
   }
+
+  depends_on = [azurerm_role_assignment.acr_keyvault_access]
+}
+
+
+resource "azurerm_role_assignment" "acr_keyvault_access" {
+  scope                = var.vault_id_output
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = var.principal_id
 }

@@ -26,3 +26,8 @@ variable "prod_aks_scaling_max_count" {
 variable "prod_aks_scaling_min_count" {
   type = number
 }
+
+variable "user_assigned_identity_id" {
+  type        = string
+  description = "The ID of the user-assigned managed identity to be associated with the AKS cluster"
+}
