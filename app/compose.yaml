@@ -8,7 +8,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: prem1112223/dockerizedbackend:v3.2
+    image: prem1112223/dockerizedbackend:v4.0
     env_file:
       - ./backend/.variables.env
     ports:
@@ -20,9 +20,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        REACT_APP_API_URL: http://backend-service.fullstack-app.svc.cluster.local:4000/api/
-    image: prem1112223/dockerizedfrontend:v3.2
+    image: prem1112223/dockerizedfrontend:v4.0
     ports:
       - "3000:80"
     depends_on:

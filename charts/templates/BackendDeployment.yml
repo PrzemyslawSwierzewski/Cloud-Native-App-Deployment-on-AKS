@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: prem1112223/dockerizedbackend:v3.2
+        image: prem1112223/dockerizedbackend:v4.0
         ports:
         - containerPort: 4000
         resources:
