@@ -60,7 +60,6 @@ Infra is fully versioned, environment-specific, and managed via Terraform worksp
 ## 5) Helm charts & values
 
 - Single chart `fullstack/` with templates for frontend, backend, DB.
-- **Values files example:**
 
 ## 6) CI/CD workflow
 
