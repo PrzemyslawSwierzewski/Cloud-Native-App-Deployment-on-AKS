@@ -1,21 +1,11 @@
 services:
-  mongo:
-    image: mongo:5
-    volumes:
-      - mongo_data:/data/db
-
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     image: prem1112223/dockerizedbackend:v4.0
-    env_file:
-      - ./backend/.variables.env
     ports:
       - "4000:4000"
-    depends_on:
-      - mongo
-
   frontend:
     build:
       context: ./frontend
@@ -23,8 +13,3 @@ services:
     image: prem1112223/dockerizedfrontend:v4.0
     ports:
       - "3000:80"
-    depends_on:
-      - backend
-
-volumes:
-  mongo_data:

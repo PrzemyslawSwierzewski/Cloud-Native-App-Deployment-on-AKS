@@ -28,3 +28,4 @@ spec:
         envFrom:
         - secretRef:
             name: mongo-secret
+            name: backend-secret
