@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-proxy
-  namespace: fullstack-app
+  name: {{ .Values.nginx-loadbalancer.name }}
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app: nginx-proxy
+    app: {{ .Values.nginx-loadbalancer.selector.app }}
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: LoadBalancer
+  - protocol: {{ .Values.nginx-loadbalancer.spec.protocol }}
+    port: {{ .Values.nginx-loadbalancer.spec.port }}
+    targetPort: {{ .Values.nginx-loadbalancer.spec.targetPort }}
+  type: {{ .Values.nginx-loadbalancer.spec.type }}

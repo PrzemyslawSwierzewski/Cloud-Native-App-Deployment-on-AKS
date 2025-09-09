@@ -1,12 +1,14 @@
+{{- $name := .Values.mongo-service.name }}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
-  namespace: fullstack-app
+  name: {{ $name }}
+  namespace: {{ .Values.namespace }}
 spec:
   clusterIP: None
   selector:
-    app: mongo
+    app: {{ $name }}
   ports:
   - port: 27017
-    name: mongo
+    name: {{ $name }}

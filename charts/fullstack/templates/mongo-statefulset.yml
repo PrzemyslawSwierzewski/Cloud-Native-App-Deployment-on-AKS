@@ -1,41 +1,43 @@
+{{- $name := .Values.mongo-statefulset.name }}
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongo
-  namespace: fullstack-app
+  name: {{ $name }}
+  namespace: {{ .Values.namespace }}
 spec:
-  serviceName: "mongo"
-  replicas: 1
+  serviceName: {{ $name }}
+  replicas: {{ .Values.mongo-statefulset.replicas }}
   selector:
     matchLabels:
-      app: mongo
+      app: {{ $name }}
   template:
     metadata:
       labels:
-        app: mongo
+        app: {{ $name }}
     spec:
       containers:
-      - name: mongo
-        image: mongo:5
+      - name: {{ $name }}
+        image: {{ .Values.mongo-statefulset.container.image }}
         ports:
         - containerPort: 27017
-          name: mongo
+          name: {{ $name }}
         resources:
           requests:
-            cpu: 200m
-            memory: 500Mi
+            cpu: {{ .Values.mongo-statefulset.resources.requests.cpu }}
+            memory: {{ .Values.mongo-statefulset.resources.requests.memory }}
           limits:
-            cpu: 500m
-            memory: 1Gi
+            cpu: {{ .Values.mongo-statefulset.resources.limits.cpu }}
+            memory: {{ .Values.mongo-statefulset.resources.limits.memory }}
         volumeMounts:
-        - name: mongo-storage
-          mountPath: /data/db
+        - name: {{ .Values.mongo-statefulset.volumeMounts.name }}
+          mountPath: {{ .Values.mongo-statefulset.volumeMounts.mountPath }}
   volumeClaimTemplates:
   - metadata:
-      name: mongo-storage
+      name: {{ .Values.mongo-statefulset.volumeMounts.name }}
     spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: managed-premium
+      accessModes: {{ .Values.mongo-statefulset.spec.accessModes }}
+      storageClassName: {{ .Values.mongo-statefulset.spec.storageClassName }}
       resources:
         requests:
-          storage: 5Gi
+          storage: {{ .Values.mongo-statefulset.storage.size }}

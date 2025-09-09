@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-proxy
-  namespace: fullstack-app
+  name: {{ .Values.nginx-deployment.name }}
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.nginx-deployment.replicas }}
   selector:
     matchLabels:
-      app: nginx-proxy
+      app: {{ .Values.nginx-deployment.name }}
   template:
     metadata:
       labels:
-        app: nginx-proxy
+        app: {{ .Values.nginx-deployment.name }}
     spec:
       containers:
-      - name: nginx
-        image: nginx:alpine
+      - name: {{ .Values.nginx-deployment.name }}
+        image: {{ .Values.nginx-deployment.image }}
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: nginx-config-volume
-          mountPath: /etc/nginx/conf.d/default.conf
-          subPath: nginx.conf
+        - name: {{ .Values.nginx-deployment.volumeMounts.name }}
+          mountPath: {{ .Values.nginx-deployment.volumeMounts.mountPath }}
+          subPath: {{ .Values.nginx-deployment.volumeMounts.subPath }}
       volumes:
-      - name: nginx-config-volume
+      - name: {{ .Values.nginx-deployment.volumeMounts.name }}
         configMap:
-          name: nginx-config
+          name: {{ .Values.nginx-configmap.name }}
