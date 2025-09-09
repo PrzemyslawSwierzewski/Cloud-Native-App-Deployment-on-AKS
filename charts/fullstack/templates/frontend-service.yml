@@ -1,11 +1,14 @@
+{{- $frontend := index .Values "frontend-service" }}
+{{- $backend := index .Values "backend-service" }}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.frontend-service.name }}
+  name: {{ $frontend.name }}
   namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app: {{ .Values.frontend-service.selector.app }}
+    app: {{ $frontend.selector.app }}
   ports:
-    - port: {{ .Values.backend-service.spec.port }}
-      targetPort: {{ .Values.backend-service.spec.targetPort }}
+    - port: {{ $backend.spec.port }}
+      targetPort: {{ $backend.spec.targetPort }}

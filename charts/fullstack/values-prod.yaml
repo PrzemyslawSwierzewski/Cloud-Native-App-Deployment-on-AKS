@@ -105,7 +105,7 @@ mongo-statefulset:
 nginx-configmap:
   name: nginx-config
   data:
-    nginx.conf: |
+    nginx.conf: |-
       server {
           listen 80;
 
@@ -145,5 +145,4 @@ nginx-loadbalancer:
     port: 80
     targetPort: 80
     protocol: TCP
-    name: http
     type: LoadBalancer

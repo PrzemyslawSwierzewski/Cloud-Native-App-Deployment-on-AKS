@@ -1,4 +1,5 @@
-{{- $name := .Values.mongo-service.name }}
+{{- $mongo := index .Values "mongo-service" }}
+{{- $name := $mongo.name }}
 
 apiVersion: v1
 kind: Service

@@ -1,28 +1,31 @@
+{{- $nginxDeploy := index .Values "nginx-deployment" }}
+{{- $nginxConfig := index .Values "nginx-configmap" }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.nginx-deployment.name }}
+  name: {{ $nginxDeploy.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.nginx-deployment.replicas }}
+  replicas: {{ $nginxDeploy.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.nginx-deployment.name }}
+      app: {{ $nginxDeploy.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.nginx-deployment.name }}
+        app: {{ $nginxDeploy.name }}
     spec:
       containers:
-      - name: {{ .Values.nginx-deployment.name }}
-        image: {{ .Values.nginx-deployment.image }}
+      - name: {{ $nginxDeploy.name }}
+        image: {{ $nginxDeploy.image }}
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: {{ .Values.nginx-deployment.volumeMounts.name }}
-          mountPath: {{ .Values.nginx-deployment.volumeMounts.mountPath }}
-          subPath: {{ .Values.nginx-deployment.volumeMounts.subPath }}
+        - name: {{ $nginxDeploy.volumeMounts.name }}
+          mountPath: {{ $nginxDeploy.volumeMounts.mountPath }}
+          subPath: {{ $nginxDeploy.volumeMounts.subPath }}
       volumes:
-      - name: {{ .Values.nginx-deployment.volumeMounts.name }}
+      - name: {{ $nginxDeploy.volumeMounts.name }}
         configMap:
-          name: {{ .Values.nginx-configmap.name }}
+          name: {{ $nginxConfig.name }}

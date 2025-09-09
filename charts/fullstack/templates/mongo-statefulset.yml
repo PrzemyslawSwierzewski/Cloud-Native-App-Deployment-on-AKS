@@ -1,4 +1,5 @@
-{{- $name := .Values.mongo-statefulset.name }}
+{{- $mongo := index .Values "mongo-statefulset" }}
+{{- $name := $mongo.name }}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -7,7 +8,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   serviceName: {{ $name }}
-  replicas: {{ .Values.mongo-statefulset.replicas }}
+  replicas: {{ $mongo.replicas }}
   selector:
     matchLabels:
       app: {{ $name }}
@@ -18,26 +19,26 @@ spec:
     spec:
       containers:
       - name: {{ $name }}
-        image: {{ .Values.mongo-statefulset.container.image }}
+        image: {{ $mongo.container.image }}
         ports:
         - containerPort: 27017
           name: {{ $name }}
         resources:
           requests:
-            cpu: {{ .Values.mongo-statefulset.resources.requests.cpu }}
-            memory: {{ .Values.mongo-statefulset.resources.requests.memory }}
+            cpu: {{ $mongo.resources.requests.cpu }}
+            memory: {{ $mongo.resources.requests.memory }}
           limits:
-            cpu: {{ .Values.mongo-statefulset.resources.limits.cpu }}
-            memory: {{ .Values.mongo-statefulset.resources.limits.memory }}
+            cpu: {{ $mongo.resources.limits.cpu }}
+            memory: {{ $mongo.resources.limits.memory }}
         volumeMounts:
-        - name: {{ .Values.mongo-statefulset.volumeMounts.name }}
-          mountPath: {{ .Values.mongo-statefulset.volumeMounts.mountPath }}
+        - name: {{ $mongo.volumeMounts.name }}
+          mountPath: {{ $mongo.volumeMounts.mountPath }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.mongo-statefulset.volumeMounts.name }}
+      name: {{ $mongo.volumeMounts.name }}
     spec:
-      accessModes: {{ .Values.mongo-statefulset.spec.accessModes }}
-      storageClassName: {{ .Values.mongo-statefulset.spec.storageClassName }}
+      accessModes: {{ $mongo.spec.accessModes }}
+      storageClassName: {{ $mongo.spec.storageClassName }}
       resources:
         requests:
-          storage: {{ .Values.mongo-statefulset.storage.size }}
+          storage: {{ $mongo.storage.size }}

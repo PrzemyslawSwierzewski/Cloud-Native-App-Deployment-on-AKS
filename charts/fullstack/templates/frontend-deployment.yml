@@ -1,4 +1,5 @@
-{{- $name := .Values.frontend-deployment.name }}
+{{- $frontend := index .Values "frontend-deployment" }}
+{{- $name := $frontend.name }}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -6,7 +7,7 @@ metadata:
   name: {{ $name }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.frontend-deployment.replicaCount }}
+  replicas: {{ $frontend.replicaCount }}
   selector:
     matchLabels:
       app: {{ $name }}
@@ -17,16 +18,16 @@ spec:
     spec:
       containers:
       - name: {{ $name }}
-        image: {{ .Values.frontend-deployment.image.repository }}
+        image: {{ $frontend.image.repository }}
         ports:
         - containerPort: 80
         resources:
           requests:
-            cpu: {{ .Values.frontend-deployment.resources.requests.cpu }}
-            memory: {{ .Values.frontend-deployment.resources.requests.memory }}
+            cpu: {{ $frontend.resources.requests.cpu }}
+            memory: {{ $frontend.resources.requests.memory }}
           limits:
-            cpu: {{ .Values.frontend-deployment.resources.limits.cpu }}
-            memory: {{  .Values.frontend-deployment.resources.limits.memory }}
+            cpu: {{ $frontend.resources.limits.cpu }}
+            memory: {{ $frontend.resources.limits.memory }}
         envFrom:
         - secretRef:
-            name: {{ .Values.frontend-deployment.secretName.frontend }}
+            name: {{ $frontend.secretName.frontend }}
