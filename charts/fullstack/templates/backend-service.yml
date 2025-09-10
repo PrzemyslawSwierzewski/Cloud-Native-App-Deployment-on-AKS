@@ -13,3 +13,4 @@ spec:
     targetPort: {{ $service.spec.targetPort }}
     protocol: {{ $service.spec.protocol }}
     name: {{ $service.spec.name }}
+  type: {{ $service.type }}
