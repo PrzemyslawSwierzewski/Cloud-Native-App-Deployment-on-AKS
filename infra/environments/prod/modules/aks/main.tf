@@ -1,3 +1,10 @@
+resource "azurerm_role_assignment" "aks_mi_operator" {
+  scope                = var.user_assigned_identity_id
+  role_definition_name = "Managed Identity Operator"
+  principal_id         = var.principal_id   # control plane principal_id (not from the cluster resource)
+}
+
+
 resource "azurerm_kubernetes_cluster" "prod_cluster" {
   name                = "${var.environment.name}-aks"
   location            = var.environment.location
@@ -16,6 +23,12 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     zones = ["3"]
   }
 
+  kubelet_identity{
+    client_id = var.client_id
+    object_id = var.principal_id
+    user_assigned_identity_id = var.user_assigned_identity_id
+  }
+
   identity {
     type = "UserAssigned"
     identity_ids = [var.user_assigned_identity_id]
@@ -31,4 +44,5 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     dns_service_ip     = "10.1.0.10"        # inside service_cidr
   }
 
+  depends_on = [azurerm_role_assignment.aks_mi_operator]
 }

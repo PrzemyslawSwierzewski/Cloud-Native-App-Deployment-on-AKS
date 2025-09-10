@@ -88,6 +88,8 @@ module "prod_aks" {
   user_assigned_identity_id = module.prod_identity.id
   prod_aks_scaling_min_count = var.prod_aks_scaling_min_count
   prod_aks_scaling_max_count = var.prod_aks_scaling_max_count
+  principal_id = module.prod_identity.principal_id
+  client_id = module.prod_identity.client_id
 
   depends_on = [module.prod_networking, module.prod_security]
 }
@@ -123,18 +125,26 @@ module "prod_acr" {
   depends_on = [azurerm_resource_group.infra_rgs, module.prod_keyvault]
 }
 
-module "prod_monitoring" {
-  source = "./environments/prod/modules/monitoring"
-  environment = local.environments.prod
-  vault_key_id = module.prod_keyvault.vault_id_output
-  kubernetes_cluster_id = module.prod_aks.kubernetes_cluster_id
-  acr_id = module.prod_acr.acr_id
-  nsg_id = module.prod_security.nsg_id
-  vnet_id = module.prod_networking.vnet_id
-  owner_email_address = var.owner_email_address
 
-  depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
-}
+
+############################################################################################################
+# The monitoring module is commented out for now, as I want to implement the monitoring solution as below:
+# https://github.com/Azure/prometheus-collector/blob/main/AddonTerraformTemplate/main.tf
+############################################################################################################
+
+
+# module "prod_monitoring" {
+#   source = "./environments/prod/modules/monitoring"
+#   environment = local.environments.prod
+#   vault_key_id = module.prod_keyvault.vault_id_output
+#   kubernetes_cluster_id = module.prod_aks.kubernetes_cluster_id
+#   acr_id = module.prod_acr.acr_id
+#   nsg_id = module.prod_security.nsg_id
+#   vnet_id = module.prod_networking.vnet_id
+#   owner_email_address = var.owner_email_address
+#
+#   depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
+# }
 
 # module "stage_networking" {
 #   source = "./environments/stage/modules/networking"
