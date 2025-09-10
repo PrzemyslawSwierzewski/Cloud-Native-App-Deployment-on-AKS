@@ -1,0 +1,148 @@
+namespace: fullstack-app
+
+backend-deployment:
+  name: backend
+  replicaCount: "1"
+  image:
+    repository: prodcontainer.azurecr.io/backend:v4.0
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "200Mi"
+    limits:
+      cpu: "200m"
+      memory: "500Mi"
+  secretName:
+    mongo: mongo-secret
+    backend: backend-secret
+
+backend-secret:
+  name: backend-secret
+  type: Opaque
+  data:
+    NODE_ENV: "development"
+    PORT: "4000"
+    SECRET: "hackthoon"
+    KEY: "idurar"
+    JWT_SCHEME: "jwt"
+    JWT_TOKEN_PREFIX: "Bearer"
+    JWT_SECRET: "thiscanbechangedlater123654789"
+    JWT_TOKEN_EXPIRATION: "18000000"
+    JWT_TOKEN_HASH_ALGO: "SHA-256"
+
+backend-service:
+  name: backend
+  spec:
+    port: "4000"
+    targetPort: "4000"
+    protocol: "TCP"
+    name: "http"
+
+frontend-deployment:
+  name: frontend
+  replicaCount: "1"
+  image:
+    repository: prodcontainer.azurecr.io/frontend:v4.0
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "200Mi"
+    limits:
+      cpu: "200m"
+      memory: "500Mi"
+  secretName:
+    frontend: frontend-secret
+
+frontend-secret:
+  name: frontend-secret
+  type: Opaque
+  data:
+    REACT_APP_API_URL: "production/api/"
+
+frontend-service:
+  name: frontend-service
+  selector:
+    app: frontend
+  spec:
+    port: "80"
+    targetPort: "80"
+
+mongo-secret:
+  name: mongo-secret
+  type: Opaque
+  data:
+    MONGO_URL: "mongodb://mongo.fullstack-app.svc.cluster.local:27017/mydb"
+    MONGO_DB: "mydb"
+
+mongo-service:
+  name: mongo
+  spec:
+    port: "27017"
+
+mongo-statefulset:
+  name: mongo
+  replicas: "1"
+  container:
+    image: mongo:5
+  storage:
+    size: "5Gi"
+    storageClassName: "managed-premium"
+  volumeMounts:
+    mountPath: "/data/db"
+    name: mongo-storage
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "500Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  spec:
+    accessModes:
+      - "ReadWriteOnce"
+    storageClassName: "managed-premium"
+
+nginx-configmap:
+  name: nginx-config
+  data:
+    nginxconf: |-
+      server {
+          listen 80;
+
+          location / {
+              proxy_pass http://frontend-service.fullstack-app.svc.cluster.local:80;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+          }
+      }
+
+nginx-deployment:
+  name: nginx-proxy
+  replicas: "1"
+  image: nginx:alpine
+  resources:
+    name: nginx
+    requests:
+      cpu: "50m"
+      memory: "100Mi"
+    limits:
+      cpu: "100m"
+      memory: "200Mi"
+  volumeMounts:
+    mountPath: "/etc/nginx/conf.d/default.conf"
+    name: nginx-config-volume
+    subPath: "nginx.conf"
+  ConfigMap:
+    name: nginx-config
+
+nginx-loadbalancer:
+  name: nginx-proxy
+  selector:
+    app: nginx-proxy
+  spec:
+    port: "80"
+    targetPort: "80"
+    protocol: "TCP"
+    type: "LoadBalancer"

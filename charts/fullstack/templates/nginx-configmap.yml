@@ -6,4 +6,4 @@ metadata:
   name: {{ $nginx.name }}
   namespace: {{ .Values.namespace }}
 data:
-  nginx.conf: {{ $nginx.data.nginx.conf | nindent 4 }}
+  nginx.conf: {{ $nginx.data.nginxconf | nindent 4 }}

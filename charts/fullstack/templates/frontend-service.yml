@@ -1,5 +1,4 @@
 {{- $frontend := index .Values "frontend-service" }}
-{{- $backend := index .Values "backend-service" }}
 
 apiVersion: v1
 kind: Service
@@ -10,5 +9,5 @@ spec:
   selector:
     app: {{ $frontend.selector.app }}
   ports:
-    - port: {{ $backend.spec.port }}
-      targetPort: {{ $backend.spec.targetPort }}
+    - port: {{ $frontend.spec.port }}
+      targetPort: {{ $frontend.spec.targetPort }}
