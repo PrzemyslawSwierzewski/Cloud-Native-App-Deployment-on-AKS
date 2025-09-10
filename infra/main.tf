@@ -90,6 +90,8 @@ module "prod_aks" {
   user_assigned_identity_id = module.prod_identity.id
   prod_aks_scaling_min_count = var.prod_aks_scaling_min_count
   prod_aks_scaling_max_count = var.prod_aks_scaling_max_count
+  client_id = module.prod_identity.client_id
+  principal_id = module.prod_identity.principal_id
 
   depends_on = [module.prod_networking, module.prod_security]
 }

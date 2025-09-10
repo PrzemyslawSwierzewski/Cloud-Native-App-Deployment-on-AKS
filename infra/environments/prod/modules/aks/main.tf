@@ -16,6 +16,12 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     zones = ["3"]
   }
 
+  kubelet_identity {
+    client_id = var.client_id
+    object_id = var.principal_id
+    user_assigned_identity_id = var.user_assigned_identity_id
+  }
+
   identity {
     type = "UserAssigned"
     identity_ids = [var.user_assigned_identity_id]

@@ -31,3 +31,13 @@ variable "user_assigned_identity_id" {
   type        = string
   description = "The ID of the user-assigned managed identity to be associated with the AKS cluster"
 }
+
+variable "client_id" {
+  type        = string
+  description = "The Client ID of the user-assigned managed identity to be associated with the AKS cluster"
+}
+
+variable "principal_id" {
+  type        = string
+  description = "The Principal ID of the user-assigned managed identity to be associated with the AKS cluster"
+}
