@@ -1,0 +1,31 @@
+{{- $nginxDeploy := index .Values "nginx-deployment" }}
+{{- $nginxConfig := index .Values "nginx-configmap" }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $nginxDeploy.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ $nginxDeploy.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $nginxDeploy.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $nginxDeploy.name }}
+    spec:
+      containers:
+      - name: {{ $nginxDeploy.name }}
+        image: {{ $nginxDeploy.image }}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: {{ $nginxDeploy.volumeMounts.name }}
+          mountPath: {{ $nginxDeploy.volumeMounts.mountPath }}
+          subPath: {{ $nginxDeploy.volumeMounts.subPath }}
+      volumes:
+      - name: {{ $nginxDeploy.volumeMounts.name }}
+        configMap:
+          name: {{ $nginxConfig.name }}

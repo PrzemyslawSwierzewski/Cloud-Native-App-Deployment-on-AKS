@@ -1,0 +1,15 @@
+{{- $mongo := index .Values "mongo-service" }}
+{{- $name := $mongo.name }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  clusterIP: None
+  selector:
+    app: {{ $name }}
+  ports:
+  - port: 27017
+    name: {{ $name }}

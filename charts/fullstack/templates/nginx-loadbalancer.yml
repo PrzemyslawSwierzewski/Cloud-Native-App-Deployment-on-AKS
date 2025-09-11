@@ -1,0 +1,15 @@
+{{- $nginxLB := index .Values "nginx-loadbalancer" }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $nginxLB.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ $nginxLB.selector.app }}
+  ports:
+  - protocol: {{ $nginxLB.spec.protocol }}
+    port: {{ $nginxLB.spec.port }}
+    targetPort: {{ $nginxLB.spec.targetPort }}
+  type: {{ $nginxLB.spec.type }}

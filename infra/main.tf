@@ -70,6 +70,8 @@ module "prod_networking" {
 module "prod_identity" {
   source = "./environments/prod/modules/identity"
   environment = local.environments.prod
+
+  depends_on = [azurerm_resource_group.infra_rgs]
 }
 
 module "prod_security" {

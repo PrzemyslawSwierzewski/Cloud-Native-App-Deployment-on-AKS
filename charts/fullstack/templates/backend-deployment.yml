@@ -1,0 +1,35 @@
+{{- $backend := index .Values "backend-deployment" }}
+{{- $name := $backend.name }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ $backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+      - name: {{ $name }}
+        image: {{ $backend.image.repository }}
+        ports:
+        - containerPort: 4000
+        resources:
+          requests:
+            cpu: {{ $backend.resources.requests.cpu }}
+            memory: {{ $backend.resources.requests.memory }}
+          limits:
+            cpu: {{ $backend.resources.limits.cpu }}
+            memory: {{ $backend.resources.limits.memory }}
+        envFrom:
+        - secretRef:
+            name: {{ $backend.secretName.mongo }}
+        - secretRef:
+            name: {{ $backend.secretName.backend }}

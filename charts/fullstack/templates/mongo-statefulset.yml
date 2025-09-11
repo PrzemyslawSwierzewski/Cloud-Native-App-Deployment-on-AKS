@@ -1,0 +1,44 @@
+{{- $mongo := index .Values "mongo-statefulset" }}
+{{- $name := $mongo.name }}
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: {{ $name }}
+  replicas: {{ $mongo.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+      - name: {{ $name }}
+        image: {{ $mongo.container.image }}
+        ports:
+        - containerPort: 27017
+          name: {{ $name }}
+        resources:
+          requests:
+            cpu: {{ $mongo.resources.requests.cpu }}
+            memory: {{ $mongo.resources.requests.memory }}
+          limits:
+            cpu: {{ $mongo.resources.limits.cpu }}
+            memory: {{ $mongo.resources.limits.memory }}
+        volumeMounts:
+        - name: {{ $mongo.volumeMounts.name }}
+          mountPath: {{ $mongo.volumeMounts.mountPath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $mongo.volumeMounts.name }}
+    spec:
+      accessModes: {{ $mongo.spec.accessModes }}
+      storageClassName: {{ $mongo.spec.storageClassName }}
+      resources:
+        requests:
+          storage: {{ $mongo.storage.size }}

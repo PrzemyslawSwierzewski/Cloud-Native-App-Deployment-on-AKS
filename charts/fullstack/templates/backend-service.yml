@@ -1,0 +1,16 @@
+{{- $service := index .Values "backend-service" }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $service.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ $service.name }}
+  ports:
+  - port: {{ $service.spec.port }}
+    targetPort: {{ $service.spec.targetPort }}
+    protocol: {{ $service.spec.protocol }}
+    name: {{ $service.spec.name }}
+  type: {{ $service.type }}
