@@ -49,4 +49,5 @@ variable "prod_aks_scaling_min_count" {
 variable "owner_email_address" {
   type        = string
   description = "Email address of the resource owner"
+  default     = "prem@wp.pl"
 }
