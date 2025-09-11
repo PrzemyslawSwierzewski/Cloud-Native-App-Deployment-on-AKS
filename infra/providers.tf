@@ -1,6 +1,5 @@
 terraform {
   cloud {
-
     organization = "Prem_learning_org"
 
     workspaces {
