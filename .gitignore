@@ -9,3 +9,5 @@ infra/.terraform/providers/registry.terraform.io/hashicorp/time/0.13.1/windows_a
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
 
+infra/.terraform/terraform.tfstate
+infra/.terraform/environment

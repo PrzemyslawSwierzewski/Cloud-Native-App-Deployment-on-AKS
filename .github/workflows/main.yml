@@ -1,0 +1,78 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  tfsec:
+    name: 'Security Scan (tfsec)'
+    runs-on: ubuntu-latest
+    env:
+      TFSEC_GITHUB_TOKEN: ${{ secrets.TFSEC_GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run tfsec (full scan)
+      uses: aquasecurity/tfsec-action@v1.0.3
+      with:
+        github_token: ${{ secrets.TFSEC_GITHUB_TOKEN }}
+        working_directory: .
+
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+
+    env:
+      TF_VAR_EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+      TF_VAR_arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.13.0
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    - name: Terraform Plan
+      run: |
+        terraform plan -input=false \
+        -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
+    - name: Terraform Apply
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: | 
+        terraform apply -auto-approve -input=false \
+        -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
