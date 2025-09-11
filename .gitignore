@@ -1,0 +1,8 @@
+infra/.terraform.lock.hcl
+infra/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.42.0/windows_amd64/terraform-provider-azurerm_v4.42.0_x5.exe
+infra/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.42.0/windows_amd64/LICENSE.txt
+infra/.terraform/modules/modules.json
+infra/.terraform/providers/registry.terraform.io/hashicorp/random/3.7.2/windows_amd64/LICENSE.txt
+infra/.terraform/providers/registry.terraform.io/hashicorp/random/3.7.2/windows_amd64/terraform-provider-random_v3.7.2_x5.exe
+infra/.terraform/providers/registry.terraform.io/hashicorp/time/0.13.1/windows_amd64/LICENSE.txt
+infra/.terraform/providers/registry.terraform.io/hashicorp/time/0.13.1/windows_amd64/terraform-provider-time_v0.13.1_x5.exe

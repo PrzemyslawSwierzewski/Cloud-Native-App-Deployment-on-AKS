@@ -1,0 +1,33 @@
+resource "azurerm_kubernetes_cluster" "stage_cluster" {
+  name                = "${var.environment.name}-aks"
+  location            = var.environment.location
+  resource_group_name = var.environment.rg_name
+  dns_prefix          = "${var.environment.name}aks"
+
+  default_node_pool {
+    name       = var.default_node_pool.name
+    node_count = var.default_node_pool.node_count
+    vm_size    = var.default_node_pool.vm_size
+    vnet_subnet_id  = var.subnet_id
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    Environment = var.environment.name
+  }
+  
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+
+  network_profile {
+    network_plugin     = "azure"
+    service_cidr       = "10.1.0.0/16"      # non-overlapping with VNet
+    dns_service_ip     = "10.1.0.10"        # inside service_cidr
+  }
+}
