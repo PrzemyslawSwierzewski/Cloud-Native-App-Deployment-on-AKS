@@ -10,12 +10,24 @@ resource "azurerm_role_assignment" "tf_keyvault_secrets_access" {
   scope                = var.vault_key_id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = data.azurerm_client_config.current.object_id
+
+  lifecycle {
+    ignore_changes = [
+      principal_id,
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "tf_keyvault_keys_access" {
   scope                = var.vault_key_id
   role_definition_name = "Key Vault Crypto User"
   principal_id         = data.azurerm_client_config.current.object_id
+
+  lifecycle {
+    ignore_changes = [
+      principal_id,
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "aks_node_keyvault_access" {
@@ -34,4 +46,10 @@ resource "azurerm_role_assignment" "tf_acr_push" {
   scope                = var.acr_id
   role_definition_name = "AcrPush"
   principal_id         = data.azurerm_client_config.current.object_id
+
+  lifecycle {
+    ignore_changes = [
+      principal_id,
+    ]
+  }
 }

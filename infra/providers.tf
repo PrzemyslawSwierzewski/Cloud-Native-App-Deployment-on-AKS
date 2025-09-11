@@ -1,11 +1,12 @@
 terraform {
-#   backend "remote" {
-#     organization = "personal_org_prem"
+  cloud {
+    organization = "Prem_learning_org"
 
-#     workspaces {
-#       name = "cloud_native_project"
-#     }
-#   }
+    workspaces {
+      name = "Cloud-native-app"
+    }
+  }
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
