@@ -91,6 +91,6 @@ jobs:
       id: get-outputs
       run: |
         cd ./infra
-        echo "acr=$(terraform output -raw acr_name)" >> $GITHUB_OUTPUT
-        echo "rg=$(terraform output -raw resource_group)" >> $GITHUB_OUTPUT
-        echo "aks=$(terraform output -raw aks_cluster_name)" >> $GITHUB_OUTPUT
+        echo "acr=$(terraform output -raw prod_acr)" >> $GITHUB_OUTPUT
+        echo "rg=$(terraform output -raw prod_resource_group)" >> $GITHUB_OUTPUT
+        echo "aks=$(terraform output -raw prod_aks_cluster_name)" >> $GITHUB_OUTPUT
