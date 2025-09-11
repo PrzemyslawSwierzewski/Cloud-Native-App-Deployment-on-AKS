@@ -4,7 +4,8 @@ backend-deployment:
   name: backend-service
   replicaCount: 1
   image:
-    repository: prem1112223/dockerizedbackend:v4.0
+    repository: ""
+    tag: ""
   resources:
     requests:
       cpu: 100m
@@ -43,7 +44,8 @@ frontend-deployment:
   name: frontend
   replicaCount: 1
   image:
-    repository: prem1112223/dockerizedfrontend:v4.0
+    repository: ""
+    tag: ""
   resources:
     requests:
       cpu: 100m
