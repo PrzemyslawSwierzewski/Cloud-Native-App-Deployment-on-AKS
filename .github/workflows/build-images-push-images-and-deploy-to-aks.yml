@@ -7,13 +7,6 @@ on:
     paths:
       - 'app/**'
       - 'charts/**'
-      - 'infra/**'  # Terraform changes
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'app/**'
-      - 'charts/**'
       - 'infra/**'
   workflow_dispatch:
 
