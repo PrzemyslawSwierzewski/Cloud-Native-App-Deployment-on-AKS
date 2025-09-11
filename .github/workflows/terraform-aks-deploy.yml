@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CHART_PATH: "./charts"
+  CHART_PATH: "./charts/fullstack"
   CHART_OVERRIDE_PATH: "./charts/values-prod.yaml"
 
 jobs:
