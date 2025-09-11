@@ -44,6 +44,10 @@ jobs:
     environment: production
     needs: detect-changes
     if: needs.detect-changes.outputs.infra_changed == 'true'
+    outputs:
+      ACR_NAME: ${{ steps.set-outputs.outputs.ACR_NAME }}
+      AKS_NAME: ${{ steps.set-outputs.outputs.AKS_NAME }}
+      RG_NAME: ${{ steps.set-outputs.outputs.RG_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -67,11 +71,12 @@ jobs:
           -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
 
       - name: Capture Terraform Outputs
+        id: set-outputs
         run: |
           cd ./infra
-          echo "ACR_NAME=$(terraform output -raw prod_acr)" >> $GITHUB_ENV
-          echo "AKS_NAME=$(terraform output -raw prod_aks_cluster_name)" >> $GITHUB_ENV
-          echo "RG_NAME=$(terraform output -raw prod_resource_group)" >> $GITHUB_ENV
+          echo "ACR_NAME=$(terraform output -raw prod_acr)" >> $GITHUB_OUTPUT
+          echo "AKS_NAME=$(terraform output -raw prod_aks_cluster_name)" >> $GITHUB_OUTPUT
+          echo "RG_NAME=$(terraform output -raw prod_resource_group)" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
@@ -83,18 +88,21 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Log in to ACR
-        run: az acr login --name $ACR_NAME
+        run: az acr login --name ${{ needs.terraform.outputs.ACR_NAME }}
+
       - name: Build & push frontend image
         run: |
           cd app/frontend
-          IMAGE_TAG=$ACR_NAME.azurecr.io/frontend:${GITHUB_SHA}
+          IMAGE_TAG=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
+
       - name: Build & push backend image
         run: |
           cd app/backend
-          IMAGE_TAG=$ACR_NAME.azurecr.io/backend:${GITHUB_SHA}
+          IMAGE_TAG=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${GITHUB_SHA}
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
@@ -108,17 +116,20 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Set up kubelogin
         uses: azure/use-kubelogin@v1
         with:
           kubelogin-version: 'v0.0.25'
+
       - name: Get K8s context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: $RG_NAME
-          cluster-name: $AKS_NAME
+          resource-group: ${{ needs.terraform.outputs.RG_NAME }}
+          cluster-name: ${{ needs.terraform.outputs.AKS_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
+
       - name: Bake Helm chart
         uses: azure/k8s-bake@v2
         with:
@@ -126,17 +137,18 @@ jobs:
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
-            frontend.image.repository=$ACR_NAME.azurecr.io/frontend
+            frontend.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
             frontend.image.tag=${GITHUB_SHA}
-            backend.image.repository=$ACR_NAME.azurecr.io/backend
+            backend.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
             backend.image.tag=${GITHUB_SHA}
           helm-version: latest
         id: bake
+
       - name: Deploy application
         uses: Azure/k8s-deploy@v4
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
-            $ACR_NAME.azurecr.io/frontend:${GITHUB_SHA}
-            $ACR_NAME.azurecr.io/backend:${GITHUB_SHA}
+            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
+            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${GITHUB_SHA}
