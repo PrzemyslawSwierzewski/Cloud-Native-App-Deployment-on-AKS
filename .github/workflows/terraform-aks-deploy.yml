@@ -80,7 +80,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [detect-changes, terraform]
+    needs: [detect-changes]
     if: needs.detect-changes.outputs.app_changed == 'true'
     steps:
       - uses: actions/checkout@v4
@@ -108,7 +108,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [detect-changes, build, terraform]
+    needs: [detect-changes, build]
     if: needs.detect-changes.outputs.charts_changed == 'true' || needs.detect-changes.outputs.app_changed == 'true'
     steps:
       - uses: actions/checkout@v4
