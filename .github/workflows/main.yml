@@ -49,20 +49,10 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./infra
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-
-    - name: Debug infra directory
-      run: |
-        echo "Current directory (should be infra):"
-        pwd
-        echo "Files in infra:"
-        ls -la
-        echo "Recursive listing:"
-        ls -R
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -70,55 +60,25 @@ jobs:
         terraform_version: 1.13.0
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Debug infra directory
-      run: |
-        echo "Current directory (should be infra):"
-        pwd
-        echo "Files in infra:"
-        ls -la
-        echo "Recursive listing:"
-        ls -R
-
     - name: Terraform Init
-      run: terraform init
-
-    - name: Debug infra directory
-      run: |
-        echo "Current directory (should be infra):"
-        pwd
-        echo "Files in infra:"
-        ls -la
-        echo "Recursive listing:"
-        ls -R
+      run: | 
+        cd ./infra
+        terraform init
 
     - name: Terraform Format
-      run: terraform fmt -check
-
-    - name: Debug infra directory
-      run: |
-        echo "Current directory (should be infra):"
-        pwd
-        echo "Files in infra:"
-        ls -la
-        echo "Recursive listing:"
-        ls -R
+      run: | 
+        cd ./infra
+        terraform fmt -check
 
     - name: Terraform Plan
       run: |
+        cd ./infra
         terraform plan -input=false \
         -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
-
-    - name: Debug infra directory
-      run: |
-        echo "Current directory (should be infra):"
-        pwd
-        echo "Files in infra:"
-        ls -la
-        echo "Recursive listing:"
-        ls -R
 
     - name: Terraform Apply
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: | 
+        cd ./infra
         terraform apply -auto-approve -input=false \
         -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
