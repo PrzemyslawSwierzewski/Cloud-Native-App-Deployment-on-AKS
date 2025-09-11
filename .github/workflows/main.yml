@@ -49,11 +49,20 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: infra
+        working-directory: ./infra
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Debug infra directory
+      run: |
+        echo "Current directory (should be infra):"
+        pwd
+        echo "Files in infra:"
+        ls -la
+        echo "Recursive listing:"
+        ls -R
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
