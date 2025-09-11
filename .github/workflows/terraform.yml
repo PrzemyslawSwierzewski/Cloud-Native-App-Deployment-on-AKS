@@ -12,6 +12,10 @@ on:
     paths:
       - 'infra/**'
 
+concurrency:
+  group: terraform-apply
+  cancel-in-progress: false
+
 permissions:
   contents: read
   pull-requests: write
@@ -82,3 +86,11 @@ jobs:
         cd ./infra
         terraform apply -auto-approve -input=false \
         -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
+    - name: Capture Terraform Outputs
+      id: get-outputs
+      run: |
+        cd ./infra
+        echo "acr=$(terraform output -raw acr_name)" >> $GITHUB_OUTPUT
+        echo "rg=$(terraform output -raw resource_group)" >> $GITHUB_OUTPUT
+        echo "aks=$(terraform output -raw aks_cluster_name)" >> $GITHUB_OUTPUT
