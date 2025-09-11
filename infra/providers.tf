@@ -1,13 +1,13 @@
 terraform {
-  cloud { 
-    
-    organization = "Prem_learning_org" 
+  cloud {
 
-    workspaces { 
-      name = "Cloud-native-app" 
-    } 
+    organization = "Prem_learning_org"
+
+    workspaces {
+      name = "Cloud-native-app"
+    }
   }
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"

@@ -37,12 +37,12 @@ variable "default_node_pool_dev_stage" {
 }
 
 variable "prod_aks_scaling_max_count" {
-  type = number
+  type    = number
   default = 1
 }
 
 variable "prod_aks_scaling_min_count" {
-  type = number
+  type    = number
   default = 1
 }
 
