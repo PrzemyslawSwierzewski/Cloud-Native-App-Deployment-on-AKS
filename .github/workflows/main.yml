@@ -70,16 +70,52 @@ jobs:
         terraform_version: 1.13.0
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+    - name: Debug infra directory
+      run: |
+        echo "Current directory (should be infra):"
+        pwd
+        echo "Files in infra:"
+        ls -la
+        echo "Recursive listing:"
+        ls -R
+
     - name: Terraform Init
       run: terraform init
 
+    - name: Debug infra directory
+      run: |
+        echo "Current directory (should be infra):"
+        pwd
+        echo "Files in infra:"
+        ls -la
+        echo "Recursive listing:"
+        ls -R
+
     - name: Terraform Format
       run: terraform fmt -check
+
+    - name: Debug infra directory
+      run: |
+        echo "Current directory (should be infra):"
+        pwd
+        echo "Files in infra:"
+        ls -la
+        echo "Recursive listing:"
+        ls -R
 
     - name: Terraform Plan
       run: |
         terraform plan -input=false \
         -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
+    - name: Debug infra directory
+      run: |
+        echo "Current directory (should be infra):"
+        pwd
+        echo "Files in infra:"
+        ls -la
+        echo "Recursive listing:"
+        ls -R
 
     - name: Terraform Apply
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
