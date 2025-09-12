@@ -46,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
 
   lifecycle {
     ignore_changes = [
-      default_node_pool.upgrade_settings
+      default_node_pool[0].upgrade_settings
     ]
   }
 
