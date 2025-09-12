@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    if: needs.detect-changes.outputs.infra_changed == 'true'
+    if: needs.detect-changes.outputs.infra_changed == 'true' || needs.detect-changes.outputs.app_changed == 'true'
     outputs:
       ACR_NAME: ${{ steps.set-outputs.outputs.ACR_NAME }}
       AKS_NAME: ${{ steps.set-outputs.outputs.AKS_NAME }}
