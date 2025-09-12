@@ -150,9 +150,9 @@ jobs:
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
             frontend-deployment.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
-            frontend-deployment.image.tag=${GITHUB_SHA}
+            frontend-deployment.image.tag=${{ github.sha }}
             backend-deployment.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
-            backend-deployment.image.tag=${GITHUB_SHA}
+            backend-deployment.image.tag=${{ github.sha }}
           helm-version: latest
         id: bake
 
@@ -162,5 +162,5 @@ jobs:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
-            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
-            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${GITHUB_SHA}
+            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
+            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${{ github.sha }}
