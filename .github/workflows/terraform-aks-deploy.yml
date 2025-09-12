@@ -149,10 +149,10 @@ jobs:
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
-            frontend.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
-            frontend.image.tag=${GITHUB_SHA}
-            backend.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
-            backend.image.tag=${GITHUB_SHA}
+            frontend-deployment.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
+            frontend-deployment.image.tag=${GITHUB_SHA}
+            backend-deployment.image.repository=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
+            backend-deployment.image.tag=${GITHUB_SHA}
           helm-version: latest
         id: bake
 
