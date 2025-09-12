@@ -44,5 +44,11 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     dns_service_ip     = "10.1.0.10"        # inside service_cidr
   }
 
+  lifecycle {
+    ignore_changes = [
+      default_node_pool.upgrade_settings
+    ]
+  }
+
   depends_on = [azurerm_role_assignment.aks_mi_operator]
 }
