@@ -17,6 +17,12 @@ concurrency:
 env:
   CHART_PATH: "./charts/fullstack"
   CHART_OVERRIDE_PATH: "./charts/values-prod.yaml"
+  TF_VAR_EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+  TF_VAR_arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
   detect-changes:
