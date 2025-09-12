@@ -1,4 +1,4 @@
-namespace: fullstack-app # Namespace for the application
+namespace: default # Namespace for the application
 
 backend-deployment:
   name: backend-service

@@ -164,4 +164,3 @@ jobs:
           images: |
             ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
             ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${GITHUB_SHA}
-          namespace: fullstack-app
