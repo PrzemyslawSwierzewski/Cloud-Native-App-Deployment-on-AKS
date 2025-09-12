@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: {{ $name }}
-        image: {{ printf "%s:%s" $backend.image.repository $backend.image.tag }}
+        image: "{{ $backend.image.repository }}:{{ $backend.image.tag }}"
         ports:
         - containerPort: 4000
         resources:
