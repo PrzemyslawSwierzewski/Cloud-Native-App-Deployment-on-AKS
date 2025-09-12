@@ -156,6 +156,9 @@ jobs:
           helm-version: latest
         id: bake
 
+      - name: Save baked manifests to file
+        run: echo "${{ steps.bake.outputs.manifestsBundle }}" > baked-manifests.yaml
+
       - name: Deploy application
         uses: Azure/k8s-deploy@v4
         with:
