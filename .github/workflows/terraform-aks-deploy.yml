@@ -63,6 +63,12 @@ jobs:
           cd ./infra
           terraform init
 
+      - name: Terraform Plan
+        run: |
+          cd ./infra
+          terraform plan -input=false \
+          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
