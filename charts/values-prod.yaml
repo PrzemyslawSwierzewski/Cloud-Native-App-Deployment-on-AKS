@@ -1,4 +1,4 @@
-namespace: default
+namespace: default # Change this to your desired namespace
 
 backend-deployment:
   name: backend-service

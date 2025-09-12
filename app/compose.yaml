@@ -13,5 +13,3 @@ services:
     image: prodcontainer.azurecr.io/backend:v4.0
     ports:
       - "3000:80"
-
-# :)
