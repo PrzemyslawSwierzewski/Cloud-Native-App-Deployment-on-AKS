@@ -1,4 +1,4 @@
-namespace: default # Change this to your desired namespace
+namespace: fullstack-app # Namespace for the application
 
 backend-deployment:
   name: backend-service
