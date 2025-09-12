@@ -15,7 +15,7 @@ resource "azurerm_resource_group" "infra_rgs" {
 
 # module "dev_security" {
 #   source = "./environments/dev/modules/security"
-#   environment = local.environments.dev
+#   environment = local.environments.dev :)
 #   subnet_id = module.dev_networking.subnet_id
 
 #   depends_on = [azurerm_resource_group.infra_rgs]
