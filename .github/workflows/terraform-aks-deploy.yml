@@ -152,8 +152,8 @@ jobs:
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
-            frontend-deployment.image="${FRONTEND_IMAGE}"
-            backend-deployment.image="${BACKEND_IMAGE}"
+            frontend-deployment.image=${{ env.FRONTEND_IMAGE }}
+            backend-deployment.image=${{ env.BACKEND_IMAGE }}
           helm-version: latest
         id: bake
 
