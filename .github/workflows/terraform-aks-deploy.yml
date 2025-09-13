@@ -145,14 +145,14 @@ jobs:
       - name: Bake Helm chart
         uses: azure/k8s-bake@v2
         env:
-          FRONTEND_REPO: ${{ needs.terraform.outputs.ACR_NAME && needs.terraform.outputs.ACR_NAME.trim() }}.azurecr.io/frontend
-          BACKEND_REPO: ${{ needs.terraform.outputs.ACR_NAME && needs.terraform.outputs.ACR_NAME.trim() }}.azurecr.io/backend
+          FRONTEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
+          BACKEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
           IMAGE_TAG: ${{ github.sha }}
         with:
           renderEngine: helm
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
-          overrides: frontend-deployment.image.repository=${{ env.FRONTEND_REPO }},frontend-deployment.image.tag=${{ env.IMAGE_TAG }},backend-deployment.image.repository=${{ env.BACKEND_REPO }},backend-deployment.image.tag=${{ env.IMAGE_TAG }}
+          overrides: frontend-deployment.image.repository=${{ env.FRONTEND_REPO }},frontend-deployment.image.tag=${{ env.IMAGE_TAG }},backend-deployment.image.repository=${{ env.BACKEND_REPO }},backend-deployment.image.tag=${{ env.IMAGE_TAG }}, Placeholder=placeholder # A workaround so that the backend image thag will not get a "=" sign
           helm-version: latest
         id: bake
 
