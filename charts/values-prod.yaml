@@ -1,7 +1,7 @@
 namespace: default # Namespace for the application
 
 backend-deployment:
-  name: backend-service
+  name: backend
   replicaCount: 1
   image:
     repository: prodcontainer.azurecr.io/backend

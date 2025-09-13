@@ -145,8 +145,8 @@ jobs:
       - name: Bake Helm chart
         uses: azure/k8s-bake@v2
         env:
-          FRONTEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
-          BACKEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
+          FRONTEND_REPO: ${{ needs.terraform.outputs.ACR_NAME && needs.terraform.outputs.ACR_NAME.trim() }}.azurecr.io/frontend
+          BACKEND_REPO: ${{ needs.terraform.outputs.ACR_NAME && needs.terraform.outputs.ACR_NAME.trim() }}.azurecr.io/backend
           IMAGE_TAG: ${{ github.sha }}
         with:
           renderEngine: helm
