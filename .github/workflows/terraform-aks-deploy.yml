@@ -145,15 +145,18 @@ jobs:
       - name: Bake Helm chart
         uses: azure/k8s-bake@v2
         env:
-          FRONTEND_IMAGE: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
-          BACKEND_IMAGE: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${{ github.sha }}
+          FRONTEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend
+          BACKEND_REPO: ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend
+          IMAGE_TAG: ${{ github.sha }}
         with:
           renderEngine: helm
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
-            frontend-deployment.image.repository=${{ env.FRONTEND_IMAGE }}
-            backend-deployment.image.repository=${{ env.BACKEND_IMAGE }}
+            frontend-deployment.image.repository=${{ env.FRONTEND_REPO }}
+            frontend-deployment.image.tag=${{ env.IMAGE_TAG }}
+            backend-deployment.image.repository=${{ env.BACKEND_REPO }}
+            backend-deployment.image.tag=${{ env.IMAGE_TAG }}
           helm-version: latest
         id: bake
 
@@ -163,5 +166,5 @@ jobs:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
-            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
-            ${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/backend:${{ github.sha }}
+            ${{ env.FRONTEND_REPO }}:${{ env.IMAGE_TAG }}
+            ${{ env.BACKEND_REPO }}:${{ env.IMAGE_TAG }}

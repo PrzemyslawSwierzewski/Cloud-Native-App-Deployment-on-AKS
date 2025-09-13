@@ -44,6 +44,7 @@ frontend-deployment:
   replicaCount: 1
   image:
     repository: ""
+    tag: ""
   resources:
     requests:
       cpu: 100m
