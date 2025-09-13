@@ -74,7 +74,7 @@ mongo-secret:
   name: mongo-secret
   type: Opaque
   data:
-    MONGO_URL: "mongodb://mongo.fullstack-app.svc.cluster.local:27017/mydb"
+    MONGO_URL: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
     MONGO_DB: "mydb"
 
 mongo-service:
@@ -113,7 +113,7 @@ nginx-configmap:
           listen 80;
 
           location / {
-              proxy_pass http://frontend-service.fullstack-app.svc.cluster.local:80;
+              proxy_pass http://frontend-service.default.svc.cluster.local:80;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
