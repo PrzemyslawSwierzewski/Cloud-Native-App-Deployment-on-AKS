@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.ingressController.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.ingressController.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.ingressController.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.ingressController.name }}
+    spec:
+      containers:
+        - name: controller
+          image: {{ .Values.ingressController.image }}
+          args:
+            - /nginx-ingress-controller
+            - --publish-service=$(POD_NAMESPACE)/{{ .Values.ingressController.name }}
+            - --election-id=ingress-controller-leader
+            - --ingress-class=nginx
+          ports:
+            - containerPort: {{ .Values.ingressController.ports.http }}
+            - containerPort: {{ .Values.ingressController.ports.https }}

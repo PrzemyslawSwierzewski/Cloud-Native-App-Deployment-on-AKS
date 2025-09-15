@@ -107,9 +107,17 @@ mongo-statefulset:
     storageClassName: managed-premium
 
 
+ingressController:
+  name: ingress-nginx-controller
+  image: registry.k8s.io/ingress-nginx/controller:v1.15.0
+  replicas: 1
+  ports:
+    http: 80
+    https: 443
+
 nginxIngress:
   name: app-ingress
-  host: "" # If using a custom domain, specify it here. Otherwise, leave it empty for default behavior.
+  host: "" # leave empty if no custom domain
   annotations:
     rewriteTarget: "/$2"
     sslRedirect: "false"
