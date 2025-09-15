@@ -123,11 +123,11 @@ nginxIngress:
     sslRedirect: "false"
   paths:
     backend:
-      path: "/api(/|$)(.*)"
+      path: "/api"
       service: backend-service
       port: 4000
     frontend:
-      path: "/(.*)"
+      path: "/"
       service: frontend-service
       port: 80
 
