@@ -14,11 +14,11 @@ backend-deployment:
       cpu: 200m
       memory: 500Mi
   secretName:
-    mongo: mongo-secret
-    backend: backend-secret
+    mongo: mongosecret
+    backend: backendsecret
 
-backend-secret:
-  name: backend-secret
+backendsecret:
+  name: backendsecret
   type: Opaque
   data:
     NODE_ENV: "development"
@@ -54,10 +54,10 @@ frontend-deployment:
       cpu: 200m
       memory: 500Mi
   secretName:
-    frontend: frontend-secret
+    frontend: frontendsecret
 
-frontend-secret:
-  name: frontend-secret
+frontendsecret:
+  name: frontendsecret
   type: Opaque
   data:
     REACT_APP_API_URL: "production/api/"
@@ -70,8 +70,8 @@ frontend-service:
     port: 80
     targetPort: 80
 
-mongo-secret:
-  name: mongo-secret
+mongosecret:
+  name: mongosecret
   type: Opaque
   data:
     MONGO_URL: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
