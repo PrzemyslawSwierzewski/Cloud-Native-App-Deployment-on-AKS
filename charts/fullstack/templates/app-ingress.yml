@@ -27,3 +27,4 @@ spec:
                 name: {{ $ingress.paths.frontend.service }}
                 port:
                   number: {{ $ingress.paths.frontend.port }}
+                  # naming to the manifests files changed
