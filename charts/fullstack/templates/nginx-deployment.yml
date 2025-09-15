@@ -1,31 +1,29 @@
-{{- $nginxDeploy := index .Values "nginx-deployment" }}
-{{- $nginxConfig := index .Values "nginx-configmap" }}
-
-apiVersion: apps/v1
-kind: Deployment
+{{- $ingress := index .Values "nginxIngress" }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: {{ $nginxDeploy.name }}
+  name: {{ $ingress.name }}
   namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: {{ $ingress.annotations.rewriteTarget }}
+    nginx.ingress.kubernetes.io/ssl-redirect: {{ $ingress.annotations.sslRedirect }}
 spec:
-  replicas: {{ $nginxDeploy.replicas }}
-  selector:
-    matchLabels:
-      app: {{ $nginxDeploy.name }}
-  template:
-    metadata:
-      labels:
-        app: {{ $nginxDeploy.name }}
-    spec:
-      containers:
-      - name: {{ $nginxDeploy.name }}
-        image: {{ $nginxDeploy.image }}
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: {{ $nginxDeploy.volumeMounts.name }}
-          mountPath: {{ $nginxDeploy.volumeMounts.mountPath }}
-          subPath: {{ $nginxDeploy.volumeMounts.subPath }}
-      volumes:
-      - name: {{ $nginxDeploy.volumeMounts.name }}
-        configMap:
-          name: {{ $nginxConfig.name }}
+  rules:
+    - host: {{ $ingress.host | default "" }}
+      http:
+        paths:
+          - path: {{ $ingress.paths.backend.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $ingress.paths.backend.service }}
+                port:
+                  number: {{ $ingress.paths.backend.port }}
+          - path: {{ $ingress.paths.frontend.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $ingress.paths.frontend.service }}
+                port:
+                  number: {{ $ingress.paths.frontend.port }}

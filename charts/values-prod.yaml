@@ -106,49 +106,21 @@ mongo-statefulset:
       - ReadWriteOnce
     storageClassName: managed-premium
 
-nginx-configmap:
-  name: nginx-config
-  data:
-    nginxconf: |-
-      server {
-          listen 80;
 
-          location / {
-              proxy_pass http://frontend-service.default.svc.cluster.local:80;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-          }
-      }
-
-nginx-deployment:
-  name: nginx-proxy
-  replicas: 1
-  image: nginx:alpine
-  resources:
-    name: nginx
-    requests:
-      cpu: 50m
-      memory: 100Mi
-    limits:
-      cpu: 100m
-      memory: 200Mi
-  volumeMounts:
-    mountPath: /etc/nginx/conf.d
-    name: nginx-config-volume
-    subpath: nginx.conf
-  ConfigMap:
-    name: nginx-config
-
-nginx-loadbalancer:
-  name: nginx-proxy
-  selector:
-    app: nginx-proxy
-  spec:
-    port: 80
-    targetPort: 80
-    protocol: TCP
-    type: LoadBalancer
+nginxIngress:
+  name: app-ingress
+  host: "" # If using a custom domain, specify it here. Otherwise, leave it empty for default behavior.
+  annotations:
+    rewriteTarget: "/$2"
+    sslRedirect: "false"
+  paths:
+    backend:
+      path: "/api(/|$)(.*)"
+      service: backend-service
+      port: 4000
+    frontend:
+      path: "/(.*)"
+      service: frontend-service
+      port: 80
 
 Placeholder: ""
