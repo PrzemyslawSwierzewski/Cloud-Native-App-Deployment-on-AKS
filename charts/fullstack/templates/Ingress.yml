@@ -6,8 +6,8 @@ metadata:
   namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ $ingress.annotations.rewriteTarget }}
-    nginx.ingress.kubernetes.io/ssl-redirect: {{ $ingress.annotations.sslRedirect }}
+    nginx.ingress.kubernetes.io/rewrite-target: "{{ $ingress.annotations.rewriteTarget }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "{{ $ingress.annotations.sslRedirect }}"
 spec:
   rules:
     - host: {{ $ingress.host | default "" }}
