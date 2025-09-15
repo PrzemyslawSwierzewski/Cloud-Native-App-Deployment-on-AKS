@@ -108,7 +108,7 @@ jobs:
         run: |
           cd app/frontend
           IMAGE_TAG=${{ needs.terraform.outputs.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
-          docker build --build-arg REACT_APP_API_URL="/api/" -t $IMAGE_TAG .
+          docker build --build-arg REACT_APP_API_URL="http://backend-service.default.svc.cluster.local:4000" -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
       - name: Build & push backend image
