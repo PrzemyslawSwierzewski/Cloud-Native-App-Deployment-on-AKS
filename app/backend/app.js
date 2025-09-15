@@ -12,8 +12,6 @@ const errorHandlers = require("./handlers/errorHandlers");
 
 const { isValidToken } = require("./controllers/authController");
 
-require("dotenv").config({ path: ".variables.env" });
-
 // create our Express app
 const app = express();
 
