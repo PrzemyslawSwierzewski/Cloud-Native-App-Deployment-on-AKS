@@ -1,9 +1,0 @@
-{{- $nginx := index .Values "nginx-configmap" }}
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ $nginx.name }}
-  namespace: {{ .Values.namespace }}
-data:
-  nginx.conf: {{ $nginx.data.nginxconf | nindent 4 }}
