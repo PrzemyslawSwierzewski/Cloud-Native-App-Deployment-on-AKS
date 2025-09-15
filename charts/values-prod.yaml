@@ -56,11 +56,12 @@ frontend-deployment:
   secretName:
     frontend: frontendsecret
 
-frontendsecret:
-  name: frontendsecret
-  type: Opaque
-  data:
-    REACT_APP_API_URL: "production/api/"
+#React does not work with secrets at runtime, hence React_app_API_URL is set during build time.
+#frontendsecret:
+#  name: frontendsecret
+#  type: Opaque
+#  data:
+#    REACT_APP_API_URL: "production/api/"
 
 frontend-service:
   name: frontend-service

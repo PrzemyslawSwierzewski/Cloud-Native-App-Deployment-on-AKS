@@ -7,6 +7,9 @@ COPY package*.json ./
 RUN npm install --silent
 
 COPY . .
+
+ENV REACT_APP_API_URL=production/api/
+
 RUN npm run build
 
 # Stage 2: Serve with nginx

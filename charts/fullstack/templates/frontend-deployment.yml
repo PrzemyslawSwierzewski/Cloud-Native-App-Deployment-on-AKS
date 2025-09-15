@@ -28,6 +28,3 @@ spec:
             limits:
               cpu: {{ $frontend.resources.limits.cpu }}
               memory: {{ $frontend.resources.limits.memory }}
-          envFrom:
-            - secretRef:
-                name: {{ $frontend.secretName.frontend }}
