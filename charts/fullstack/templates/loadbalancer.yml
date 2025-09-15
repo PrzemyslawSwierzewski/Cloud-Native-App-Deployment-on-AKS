@@ -8,9 +8,10 @@ spec:
   selector:
     app: {{ .Values.ingressController.name }}
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: {{ .Values.ingressController.ports.http }}
       targetPort: {{ .Values.ingressController.ports.http }}
-    - protocol: TCP
+    - name: https
+      protocol: TCP
       port: {{ .Values.ingressController.ports.https }}
-      targetPort: {{ .Values.ingressController.ports.https }}
