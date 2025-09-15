@@ -22,5 +22,7 @@ spec:
             - --election-id=ingress-controller-leader
             - --ingress-class=nginx
           ports:
-            - containerPort: {{ .Values.ingressController.ports.http }}
-            - containerPort: {{ .Values.ingressController.ports.https }}
+            - name: http
+              containerPort: {{ .Values.ingressController.ports.http }}
+            - name: https
+              containerPort: {{ .Values.ingressController.ports.https }}

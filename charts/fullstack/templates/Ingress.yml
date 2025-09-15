@@ -27,4 +27,3 @@ spec:
                 name: {{ $ingress.paths.frontend.service }}
                 port:
                   number: {{ $ingress.paths.frontend.port }}
-                  # Chart got changed, but the workflow overslept ;D NOW BUILD OVERSLEPT TOO :D -__-
