@@ -17,19 +17,19 @@ spec:
         app: {{ $name }}
     spec:
       containers:
-      - name: {{ $name }}
-        image: {{ $backend.image.repository }}:{{ $backend.image.tag }}
-        ports:
-        - containerPort: 4000
-        resources:
-          requests:
-            cpu: {{ $backend.resources.requests.cpu }}
-            memory: {{ $backend.resources.requests.memory }}
-          limits:
-            cpu: {{ $backend.resources.limits.cpu }}
-            memory: {{ $backend.resources.limits.memory }}
-        envFrom:
-        - secretRef:
-            name: {{ $backend.secretName.mongo }}
-        - secretRef:
-            name: {{ $backend.secretName.backend }}
+        - name: {{ $name }}
+          image: {{ $backend.image.repository }}:{{ $backend.image.tag }}
+          ports:
+            - containerPort: 4000
+          resources:
+            requests:
+              cpu: {{ $backend.resources.requests.cpu }}
+              memory: {{ $backend.resources.requests.memory }}
+            limits:
+              cpu: {{ $backend.resources.limits.cpu }}
+              memory: {{ $backend.resources.limits.memory }}
+          envFrom:
+            - secretRef:
+                name: {{ $backend.secretName.mongo }}
+            - secretRef:
+                name: {{ $backend.secretName.backend }}

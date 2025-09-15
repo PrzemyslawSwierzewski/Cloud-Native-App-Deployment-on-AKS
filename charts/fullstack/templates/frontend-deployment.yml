@@ -17,17 +17,17 @@ spec:
         app: {{ $name }}
     spec:
       containers:
-      - name: {{ $name }}
-        image: {{ $frontend.image.repository }}:{{ $frontend.image.tag }}
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            cpu: {{ $frontend.resources.requests.cpu }}
-            memory: {{ $frontend.resources.requests.memory }}
-          limits:
-            cpu: {{ $frontend.resources.limits.cpu }}
-            memory: {{ $frontend.resources.limits.memory }}
-        envFrom:
-        - secretRef:
-            name: {{ $frontend.secretName.frontend }}
+        - name: {{ $name }}
+          image: {{ $frontend.image.repository }}:{{ $frontend.image.tag }}
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: {{ $frontend.resources.requests.cpu }}
+              memory: {{ $frontend.resources.requests.memory }}
+            limits:
+              cpu: {{ $frontend.resources.limits.cpu }}
+              memory: {{ $frontend.resources.limits.memory }}
+          envFrom:
+            - secretRef:
+                name: {{ $frontend.secretName.frontend }}
