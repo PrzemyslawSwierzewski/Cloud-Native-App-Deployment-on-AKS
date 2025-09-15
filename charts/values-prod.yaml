@@ -109,7 +109,7 @@ mongo-statefulset:
 
 ingressController:
   name: ingress-nginx-controller
-  image: registry.k8s.io/ingress-nginx/controller:v1.15.0
+  image: registry.k8s.io/ingress-nginx/controller:v1.13.2
   replicas: 1
   ports:
     http: 80
