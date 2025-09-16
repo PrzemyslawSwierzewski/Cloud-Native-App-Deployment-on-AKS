@@ -12,6 +12,8 @@ const errorHandlers = require("./handlers/errorHandlers");
 
 const { isValidToken } = require("./controllers/authController");
 
+require("dotenv").config({ path: ".variables.env" });
+
 // create our Express app
 const app = express();
 
@@ -30,7 +32,7 @@ app.use(
     key: process.env.KEY,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
+    store: MongoStore.create({ mongoUrl: process.env.DATABASE }),
   })
 );
 

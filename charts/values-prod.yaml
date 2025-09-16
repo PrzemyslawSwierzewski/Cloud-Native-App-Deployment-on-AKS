@@ -68,7 +68,7 @@ mongo-secret:
   name: mongo-secret
   type: Opaque
   data:
-    MONGO_URL: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
+    DATABASE: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
     MONGO_DB: "mydb"
 
 mongo-service:
