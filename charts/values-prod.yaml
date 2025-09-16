@@ -33,6 +33,8 @@ backendsecret:
 
 backend-service:
   name: backend-service
+  selector:
+    app: backend
   spec:
     port: 4000
     targetPort: 4000
