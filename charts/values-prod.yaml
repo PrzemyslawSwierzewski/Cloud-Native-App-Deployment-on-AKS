@@ -1,7 +1,7 @@
-namespace: default # Namespace for the application
+namespace: default
 
 backend-deployment:
-  name: backend
+  name: backend-service
   replicaCount: 1
   image:
     repository: prodcontainer.azurecr.io/backend
@@ -14,11 +14,11 @@ backend-deployment:
       cpu: 200m
       memory: 500Mi
   secretName:
-    mongo: mongosecret
-    backend: backendsecret
+    mongo: mongo-secret
+    backend: backend-secret
 
-backendsecret:
-  name: backendsecret
+backend-secret:
+  name: backend-secret
   type: Opaque
   data:
     NODE_ENV: "development"
@@ -33,8 +33,6 @@ backendsecret:
 
 backend-service:
   name: backend-service
-  selector:
-    app: backend
   spec:
     port: 4000
     targetPort: 4000
@@ -56,14 +54,7 @@ frontend-deployment:
       cpu: 200m
       memory: 500Mi
   secretName:
-    frontend: frontendsecret
-
-#React does not work with secrets at runtime, hence React_app_API_URL is set during build time.
-#frontendsecret:
-#  name: frontendsecret
-#  type: Opaque
-#  data:
-#    REACT_APP_API_URL: "production/api/"
+    frontend: frontend-secret
 
 frontend-service:
   name: frontend-service
@@ -73,8 +64,8 @@ frontend-service:
     port: 80
     targetPort: 80
 
-mongosecret:
-  name: mongosecret
+mongo-secret:
+  name: mongo-secret
   type: Opaque
   data:
     MONGO_URL: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
@@ -107,7 +98,7 @@ mongo-statefulset:
     accessModes:
       - ReadWriteOnce
     storageClassName: managed-premium
-    
+
 nginx-configmap:
   name: nginx-config
   data:
@@ -116,21 +107,20 @@ nginx-configmap:
           listen 80;
 
           location / {
-              root /usr/share/nginx/html;
-              index index.html;
-              try_files $uri /index.html;
-          }
-
-          location /api/ {
-              proxy_pass http://backend-service.default.svc.cluster.local:4000/;
-              proxy_http_version 1.1;
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection 'upgrade';
+              proxy_pass http://frontend-service.default.svc.cluster.local:80;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
               proxy_set_header X-Forwarded-Proto $scheme;
           }
+
+          location /api/ {
+            proxy_pass http://backend-service.default.svc.cluster.local:4000/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
       }
 
 nginx-deployment:
@@ -161,5 +151,3 @@ nginx-loadbalancer:
     targetPort: 80
     protocol: TCP
     type: LoadBalancer
-
-Placeholder: ""
