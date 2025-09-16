@@ -13,6 +13,7 @@ spec:
       labels:
         app: {{ .Values.ingressController.name }}
     spec:
+      serviceAccountName: {{ .Values.ingressController.name }}
       containers:
         - name: controller
           image: {{ .Values.ingressController.image }}
