@@ -19,7 +19,7 @@ spec:
           image: {{ .Values.ingressController.image }}
           args:
             - /nginx-ingress-controller
-            - --publish-service=$(POD_NAMESPACE)/{{ .Values.ingressController.name }}
+            - --publish-service=default/{{ .Values.ingressController.name }} # adjust namespace if needed, currently hardcoded
             - --election-id=ingress-controller-leader
             - --ingress-class=nginx
           ports:
