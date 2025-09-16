@@ -1,38 +1,31 @@
+{{- $nginxDeploy := index .Values "nginx-deployment" }}
+{{- $nginxConfig := index .Values "nginx-configmap" }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.ingressController.name }}
+  name: {{ $nginxDeploy.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.ingressController.replicas }}
+  replicas: {{ $nginxDeploy.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.ingressController.name }}
+      app: {{ $nginxDeploy.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.ingressController.name }}
+        app: {{ $nginxDeploy.name }}
     spec:
-      serviceAccountName: {{ .Values.ingressController.name }}
       containers:
-        - name: controller
-          image: {{ .Values.ingressController.image }}
-          args:
-            - /nginx-ingress-controller
-            - --publish-service={{ .Values.namespace }}/{{ .Values.ingressController.name }}
-            - --election-id=ingress-controller-leader
-            - --ingress-class=nginx
-          env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          ports:
-            - name: http
-              containerPort: {{ .Values.ingressController.ports.http }}
-            - name: https
-              containerPort: {{ .Values.ingressController.ports.https }}
+      - name: {{ $nginxDeploy.name }}
+        image: {{ $nginxDeploy.image }}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: {{ $nginxDeploy.volumeMounts.name }}
+          mountPath: {{ $nginxDeploy.volumeMounts.mountPath }}
+          subPath: {{ $nginxDeploy.volumeMounts.subPath }}
+      volumes:
+      - name: {{ $nginxDeploy.volumeMounts.name }}
+        configMap:
+          name: {{ $nginxConfig.name }}

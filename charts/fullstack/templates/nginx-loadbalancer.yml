@@ -1,17 +1,15 @@
+{{- $nginxLB := index .Values "nginx-loadbalancer" }}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.ingressController.name }}
+  name: {{ $nginxLB.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
   selector:
-    app: {{ .Values.ingressController.name }}
+    app: {{ $nginxLB.selector.app }}
   ports:
-    - name: http
-      protocol: TCP
-      port: {{ .Values.ingressController.ports.http }}
-      targetPort: {{ .Values.ingressController.ports.http }}
-    - name: https
-      protocol: TCP
-      port: {{ .Values.ingressController.ports.https }}
+  - protocol: {{ $nginxLB.spec.protocol }}
+    port: {{ $nginxLB.spec.port }}
+    targetPort: {{ $nginxLB.spec.targetPort }}
+  type: {{ $nginxLB.spec.type }}
