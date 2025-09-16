@@ -19,9 +19,18 @@ spec:
           image: {{ .Values.ingressController.image }}
           args:
             - /nginx-ingress-controller
-            - --publish-service=default/{{ .Values.ingressController.name }} # adjust namespace if needed, currently hardcoded
+            - --publish-service={{ .Values.namespace }}/{{ .Values.ingressController.name }}
             - --election-id=ingress-controller-leader
             - --ingress-class=nginx
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           ports:
             - name: http
               containerPort: {{ .Values.ingressController.ports.http }}
