@@ -19,21 +19,21 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.TFSEC_GITHUB_TOKEN }}
 
 jobs:
   tfsec:
     name: 'Security Scan (tfsec)'
     runs-on: ubuntu-latest
     env:
-      TFSEC_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TFSEC_GITHUB_TOKEN: ${{ secrets.TFSEC_GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
       - name: Run tfsec (full scan)
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TFSEC_GITHUB_TOKEN }}
           working_directory: ./infra
 
   terraform:
