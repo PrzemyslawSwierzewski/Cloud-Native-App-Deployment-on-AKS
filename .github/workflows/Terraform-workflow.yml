@@ -1,0 +1,114 @@
+name: Terraform workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+
+env:
+  TF_VAR_EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+  TF_VAR_arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  tfsec:
+    name: 'Security Scan (tfsec)'
+    runs-on: ubuntu-latest
+    env:
+      TFSEC_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tfsec (full scan)
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: ./infra
+
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.1
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: |
+          cd ./infra
+          terraform init
+      
+      - name: Terraform Format recursive
+        run: |
+          cd ./infra
+          terraform fmt -recursive
+
+      - name: Terraform Plan
+        run: |
+          cd ./infra
+          terraform plan -input=false \
+          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd ./infra
+          terraform apply -auto-approve -input=false \
+          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+
+      - name: Capture Outputs
+        id: tf-outputs
+        run: |
+          cd ./infra
+          echo "PROD_ACR_NAME=$(terraform output -raw prod_acr)" >> $GITHUB_ENV
+          echo "PROD_AKS_NAME=$(terraform output -raw prod_aks_cluster_name)" >> $GITHUB_ENV
+          echo "PROD_RG_NAME=$(terraform output -raw prod_resource_group)" >> $GITHUB_ENV
+          echo "DEV_ACR_NAME=$(terraform output -raw dev_acr)" >> $GITHUB_ENV
+          echo "DEV_AKS_NAME=$(terraform output -raw dev_aks_cluster_name)" >> $GITHUB_ENV
+          echo "DEV_RG_NAME=$(terraform output -raw dev_resource_group)" >> $GITHUB_ENV
+          echo "STAGING_ACR_NAME=$(terraform output -raw staging_acr)" >> $GITHUB_ENV
+          echo "STAGING_AKS_NAME=$(terraform output -raw staging_aks_cluster_name)" >> $GITHUB_ENV
+          echo "STAGING_RG_NAME=$(terraform output -raw staging_resource_group)" >> $GITHUB_ENV
+
+      - name: Install GitHub CLI
+        run: sudo apt-get update && sudo apt-get install -y gh
+
+      - name: Save Variables to GitHub
+        run: |
+          gh variable set PROD_ACR_NAME --body "$PROD_ACR_NAME"
+          gh variable set PROD_AKS_NAME --body "$PROD_AKS_NAME"
+          gh variable set PROD_RG_NAME --body "$PROD_RG_NAME"
+          gh variable set DEV_ACR_NAME --body "$DEV_ACR_NAME"
+          gh variable set DEV_AKS_NAME --body "$DEV_AKS_NAME"
+          gh variable set DEV_RG_NAME --body "$DEV_RG_NAME"
+          gh variable set STAGING_ACR_NAME --body "$STAGING_ACR_NAME"
+          gh variable set STAGING_AKS_NAME --body "$STAGING_AKS_NAME"
+          gh variable set STAGING_RG_NAME --body "$STAGING_RG_NAME"
+
+        env:
+          PROD_ACR_NAME: ${{ env.PROD_ACR_NAME }}
+          PROD_AKS_NAME: ${{ env.PROD_AKS_NAME }}
+          PROD_RG_NAME: ${{ env.PROD_RG_NAME }}
+          DEV_ACR_NAME: ${{ env.DEV_ACR_NAME }}
+          DEV_AKS_NAME: ${{ env.DEV_AKS_NAME }}
+          DEV_RG_NAME: ${{ env.DEV_RG_NAME }}
+          STAGING_ACR_NAME: ${{ env.STAGING_ACR_NAME }}
+          STAGING_AKS_NAME: ${{ env.STAGING_AKS_NAME }}
+          STAGING_RG_NAME: ${{ env.STAGING_RG_NAME }}
