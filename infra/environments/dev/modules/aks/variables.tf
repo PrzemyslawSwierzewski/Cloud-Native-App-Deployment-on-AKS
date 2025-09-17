@@ -18,3 +18,26 @@ variable "default_node_pool" {
 variable "subnet_id" {
   type = string
 }
+
+variable "dev_aks_scaling_max_count" {
+  type = number
+}
+
+variable "dev_aks_scaling_min_count" {
+  type = number
+}
+
+variable "user_assigned_identity_id" {
+  type        = string
+  description = "The ID of the user-assigned managed identity to be associated with the AKS cluster"
+}
+
+variable "principal_id" {
+  type        = string
+  description = "The principal ID of the user-assigned managed identity"
+}
+
+variable "client_id" {
+  type        = string
+  description = "The client ID of the user-assigned managed identity"
+}
