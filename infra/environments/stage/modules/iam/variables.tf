@@ -12,12 +12,12 @@ variable "vault_key_id" {
   description = "The ID of the Key Vault key"
 }
 
-variable "user_assigned_identity_id" {
-  type        = string
-  description = "The ID of the user-assigned managed identity"
+variable "acr_id" {
+    type = string
+    description = "Acr id that was pulled from the root module"
 }
 
-variable "kubernetes_cluster_id_principal_id" {
+variable "user_assigned_identity_id" {
   type        = string
-  description = "The principal ID of the Kubernetes cluster"
+  description = "Principal ID of the shared user-assigned managed identity"
 }
