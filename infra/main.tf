@@ -164,69 +164,69 @@ module "prod_acr" {
 #   depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
 # }
 
-module "stage_networking" {
-  source      = "./environments/stage/modules/networking"
-  environment = local.environments.stage
+# module "stage_networking" {
+#   source      = "./environments/stage/modules/networking"
+#   environment = local.environments.stage
 
-  depends_on = [azurerm_resource_group.infra_rgs]
-}
+#   depends_on = [azurerm_resource_group.infra_rgs]
+# }
 
-module "stage_identity" {
-  source      = "./environments/stage/modules/identity"
-  environment = local.environments.stage
+# module "stage_identity" {
+#   source      = "./environments/stage/modules/identity"
+#   environment = local.environments.stage
 
-  depends_on = [azurerm_resource_group.infra_rgs]
-}
+#   depends_on = [azurerm_resource_group.infra_rgs]
+# }
 
-module "stage_security" {
-  source      = "./environments/stage/modules/security"
-  environment = local.environments.stage
-  subnet_id   = module.stage_networking.subnet_id
+# module "stage_security" {
+#   source      = "./environments/stage/modules/security"
+#   environment = local.environments.stage
+#   subnet_id   = module.stage_networking.subnet_id
 
-  depends_on = [module.stage_networking]
-}
+#   depends_on = [module.stage_networking]
+# }
 
-module "stage_aks" {
-  source                     = "./environments/stage/modules/aks"
-  environment                = local.environments.stage
-  default_node_pool          = var.default_node_pools.stage
-  subnet_id                  = module.stage_networking.subnet_id
-  user_assigned_identity_id  = module.stage_identity.id
-  stage_aks_scaling_min_count = var.aks_scaling.stage.min
-  stage_aks_scaling_max_count = var.aks_scaling.stage.max
-  principal_id               = module.stage_identity.principal_id
-  client_id                  = module.stage_identity.client_id
+# module "stage_aks" {
+#   source                     = "./environments/stage/modules/aks"
+#   environment                = local.environments.stage
+#   default_node_pool          = var.default_node_pools.stage
+#   subnet_id                  = module.stage_networking.subnet_id
+#   user_assigned_identity_id  = module.stage_identity.id
+#   stage_aks_scaling_min_count = var.aks_scaling.stage.min
+#   stage_aks_scaling_max_count = var.aks_scaling.stage.max
+#   principal_id               = module.stage_identity.principal_id
+#   client_id                  = module.stage_identity.client_id
 
-  depends_on = [module.stage_networking, module.stage_security]
-}
+#   depends_on = [module.stage_networking, module.stage_security]
+# }
 
-module "stage_keyvault" {
-  source             = "./environments/stage/modules/keyvault"
-  environment        = local.environments.stage
-  sku_name_key_vault = var.sku_name_key_vault
+# module "stage_keyvault" {
+#   source             = "./environments/stage/modules/keyvault"
+#   environment        = local.environments.stage
+#   sku_name_key_vault = var.sku_name_key_vault
 
-  depends_on = [azurerm_resource_group.infra_rgs]
-}
+#   depends_on = [azurerm_resource_group.infra_rgs]
+# }
 
-module "stage_iam" {
-  source                    = "./environments/stage/modules/iam"
-  environment               = local.environments.stage
-  vault_key_id              = module.stage_keyvault.vault_id_output
-  acr_id                    = module.stage_acr.acr_id
-  user_assigned_identity_id = module.stage_identity.principal_id
+# module "stage_iam" {
+#   source                    = "./environments/stage/modules/iam"
+#   environment               = local.environments.stage
+#   vault_key_id              = module.stage_keyvault.vault_id_output
+#   acr_id                    = module.stage_acr.acr_id
+#   user_assigned_identity_id = module.stage_identity.principal_id
 
-  depends_on = [module.stage_aks, module.stage_keyvault, module.stage_acr]
-}
+#   depends_on = [module.stage_aks, module.stage_keyvault, module.stage_acr]
+# }
 
-module "stage_acr" {
-  source                           = "./environments/stage/modules/acr"
-  acr_sku                          = var.acr_sku
-  environment                      = local.environments.stage
-  key_vault_key_id                 = module.stage_keyvault.key_vault_key_id
-  user_assigned_identity_id        = module.stage_identity.id
-  user_assigned_identity_client_id = module.stage_identity.client_id
-  principal_id                     = module.stage_identity.principal_id
-  vault_id_output                  = module.stage_keyvault.vault_id_output
+# module "stage_acr" {
+#   source                           = "./environments/stage/modules/acr"
+#   acr_sku                          = var.acr_sku
+#   environment                      = local.environments.stage
+#   key_vault_key_id                 = module.stage_keyvault.key_vault_key_id
+#   user_assigned_identity_id        = module.stage_identity.id
+#   user_assigned_identity_client_id = module.stage_identity.client_id
+#   principal_id                     = module.stage_identity.principal_id
+#   vault_id_output                  = module.stage_keyvault.vault_id_output
 
-  depends_on = [azurerm_resource_group.infra_rgs, module.stage_keyvault]
-}
+#   depends_on = [azurerm_resource_group.infra_rgs, module.stage_keyvault]
+# }
