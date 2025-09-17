@@ -147,7 +147,7 @@ module "prod_acr" {
 
 ############################################################################################################
 # The monitoring module is commented out for now, as I want to implement the monitoring solution as below:
-# https://github.com/Azure/prometheus-collector/blob/main/AddonTerraformTemplate/main.tf  :)
+# https://github.com/Azure/prometheus-collector/blob/main/AddonTerraformTemplate/main.tf
 ############################################################################################################
 
 
