@@ -81,7 +81,7 @@ This project demonstrates a **production-grade cloud-native setup** running on *
 - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)  
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)  
 - [Helm](https://helm.sh/docs/intro/install/)  
-- Docker
+- [Docker](https://www.docker.com/get-started)
 
 ### Setup
 1. Clone the repo:
