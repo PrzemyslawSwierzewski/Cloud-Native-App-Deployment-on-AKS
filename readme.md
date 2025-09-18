@@ -110,7 +110,7 @@ TF_API_TOKEN
        terraform init
        terraform apply
 ```
-5. Build & push Docker images (manual step if not using CI/CD):
+5. Build & push Docker images:
 ```bash
        Best option to build the images is to run the workflow
 ```
