@@ -104,21 +104,19 @@ TF_API_TOKEN
 ```bash 
        az login
 ```
-4. Provision infrastructure (example: dev):
+4. Provision infrastructure:
 ```bash
-       cd terraform/dev
+       cd infra
        terraform init
        terraform apply
 ```
 5. Build & push Docker images (manual step if not using CI/CD):
 ```bash
-       cd app/frontend
-       docker build -t <ACR_NAME>.azurecr.io/frontend:local .
-       docker push <ACR_NAME>.azurecr.io/frontend:local
+       Best option to build the images is to run the workflow
 ```
 6. Deploy with Helm:
 ```bash
-       helm upgrade --install fullstack ./charts/fullstack -f charts/values-prod.yaml
+       Best option to deploy the application is to run the workflow
 ```
 ---
 
