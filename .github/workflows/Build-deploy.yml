@@ -13,7 +13,6 @@ on:
 
 env:
   CHART_PATH: "./charts/fullstack"
-  CHART_OVERRIDE_PATH: "./charts/values-prod.yaml"
 
 jobs:
   set-env:
@@ -22,6 +21,7 @@ jobs:
       ACR_NAME: ${{ steps.set-vars.outputs.ACR_NAME }}
       AKS_NAME: ${{ steps.set-vars.outputs.AKS_NAME }}
       RG_NAME: ${{ steps.set-vars.outputs.RG_NAME }}
+      CHART_OVERRIDE_PATH: ${{ steps.set-vars.outputs.CHART_OVERRIDE_PATH }}
     steps:
       - id: set-vars
         run: |
@@ -29,14 +29,17 @@ jobs:
             echo "ACR_NAME=${{ vars.PROD_ACR_NAME }}" >> $GITHUB_OUTPUT
             echo "AKS_NAME=${{ vars.PROD_AKS_NAME }}" >> $GITHUB_OUTPUT
             echo "RG_NAME=${{ vars.PROD_RG_NAME }}" >> $GITHUB_OUTPUT
+            echo "CHART_OVERRIDE_PATH=./charts/values-prod.yaml" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF##*/}" == "staging" ]]; then
             echo "ACR_NAME=${{ vars.STAGING_ACR_NAME }}" >> $GITHUB_OUTPUT
             echo "AKS_NAME=${{ vars.STAGING_AKS_NAME }}" >> $GITHUB_OUTPUT
             echo "RG_NAME=${{ vars.STAGING_RG_NAME }}" >> $GITHUB_OUTPUT
+            echo "CHART_OVERRIDE_PATH=./charts/values-stage.yaml" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF##*/}" == "dev" ]]; then
             echo "ACR_NAME=${{ vars.DEV_ACR_NAME }}" >> $GITHUB_OUTPUT
             echo "AKS_NAME=${{ vars.DEV_AKS_NAME }}" >> $GITHUB_OUTPUT
             echo "RG_NAME=${{ vars.DEV_RG_NAME }}" >> $GITHUB_OUTPUT
+            echo "CHART_OVERRIDE_PATH=./charts/values-dev.yaml" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch. Exiting."
             exit 1
@@ -79,6 +82,7 @@ jobs:
       ACR_NAME: ${{ needs.set-env.outputs.ACR_NAME }}
       AKS_NAME: ${{ needs.set-env.outputs.AKS_NAME }}
       RG_NAME: ${{ needs.set-env.outputs.RG_NAME }}
+      CHART_OVERRIDE_PATH: ${{ needs.set-env.outputs.CHART_OVERRIDE_PATH }}
     steps:
       - uses: actions/checkout@v4
 

@@ -32,4 +32,4 @@ spec:
             - secretRef:
                 name: {{ $backend.secretName.mongo }}
             - secretRef:
-                name: {{ $backend.secretName.backend }}
+                name: {{ $backend.secretName.backend }} #check of a build-deploy workflow
