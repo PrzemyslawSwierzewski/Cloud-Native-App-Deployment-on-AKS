@@ -3,12 +3,18 @@ variable "cluster_name" {
   description = "The name of the AKS cluster"
 }
 
-variable "metric_labels_allowlist" {
-  default = null
+variable "environment" {
+  type = object({
+    name     = string
+    rg_name  = string
+    location = string
+  })
+  description = "Values for a single environment, including rg_name and location and name of the environment"
 }
 
-variable "metric_annotations_allowlist" {
-  default = null
+variable "cluster_id" {
+  type        = string
+  description = "The ID of the AKS cluster"
 }
 
 variable "dns_prefix" {
@@ -40,12 +46,12 @@ variable "monitor_workspace_name" {
 }
 
 variable "amw_region" {
-  default = "northeurope"
+  default     = "northeurope"
   description = "Location of the Azure Monitor Workspace"
 }
 
 variable "cluster_region" {
-  default = "eastus"
+  default     = "eastus"
   description = "Location of the Azure Kubernetes Cluster"
 }
 
@@ -55,7 +61,7 @@ variable "resource_group_location" {
 }
 
 variable "enable_windows_recording_rules" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Enable UX recording rules for Windows (default: false)"
 }

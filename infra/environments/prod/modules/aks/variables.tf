@@ -1,7 +1,7 @@
 variable "environment" {
   type = object({
-    name    = string
-    rg_name = string
+    name     = string
+    rg_name  = string
     location = string
   })
   description = "Values for a single environment, including rg_name and location and name of the environment"
@@ -40,4 +40,12 @@ variable "principal_id" {
 variable "client_id" {
   type        = string
   description = "The client ID of the user-assigned managed identity"
+}
+
+variable "metric_labels_allowlist" {
+  default = null
+}
+
+variable "metric_annotations_allowlist" {
+  default = null
 }

@@ -37,7 +37,7 @@ resource "azurerm_role_assignment" "aks_node_keyvault_access" {
 }
 
 resource "azurerm_role_assignment" "aks_acr_pull" {
-  scope                = var.acr_id   
+  scope                = var.acr_id
   role_definition_name = "AcrPull"
   principal_id         = var.user_assigned_identity_id
 }

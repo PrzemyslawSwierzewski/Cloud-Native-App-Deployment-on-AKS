@@ -151,18 +151,14 @@ module "prod_acr" {
 ############################################################################################################
 
 
-# module "prod_monitoring" {
-#   source = "./environments/prod/modules/monitoring"
-#   environment = local.environments.prod
-#   vault_key_id = module.prod_keyvault.vault_id_output
-#   kubernetes_cluster_id = module.prod_aks.kubernetes_cluster_id
-#   acr_id = module.prod_acr.acr_id
-#   nsg_id = module.prod_security.nsg_id
-#   vnet_id = module.prod_networking.vnet_id
-#   owner_email_address = var.owner_email_address
-#
-#   depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
-# }
+module "prod_monitoring" {
+  source       = "./environments/prod/modules/monitoring"
+  cluster_name = module.prod_aks.aks_cluster_name
+  environment  = local.environments.prod
+  cluster_id   = module.prod_aks.kubernetes_cluster_id
+
+  depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
+}
 
 # module "stage_networking" {
 #   source      = "./environments/stage/modules/networking"
