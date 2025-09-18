@@ -7,7 +7,7 @@ output "key_vault_name" {
 }
 
 output "azurerm_key_vault_key_name" {
-  value =azurerm_key_vault_key.prod_key.name
+  value = azurerm_key_vault_key.prod_key.name
 }
 
 output "key_vault_key_id" {

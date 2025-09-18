@@ -1,8 +1,8 @@
 resource "azurerm_container_registry" "dev_acr" {
-  name                = "${var.environment.name}container"
-  resource_group_name = var.environment.rg_name
-  location            = var.environment.location
-  sku                 = var.acr_sku
+  name                    = "${var.environment.name}container"
+  resource_group_name     = var.environment.rg_name
+  location                = var.environment.location
+  sku                     = var.acr_sku
   zone_redundancy_enabled = true
 
   identity {

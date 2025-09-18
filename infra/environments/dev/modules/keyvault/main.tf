@@ -17,7 +17,7 @@ resource "azurerm_key_vault" "devkeyvault" {
   rbac_authorization_enabled  = true
 
   sku_name = var.sku_name_key_vault
-  
+
   tags = {
     Environment = var.environment.name
   }

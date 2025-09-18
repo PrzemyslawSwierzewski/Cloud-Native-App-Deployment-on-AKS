@@ -1,7 +1,7 @@
 variable "environment" {
   type = object({
-    name    = string
-    rg_name = string
+    name     = string
+    rg_name  = string
     location = string
   })
   description = "Values for a single environment, including rg_name and location and name of the environment"
@@ -13,8 +13,8 @@ variable "vault_key_id" {
 }
 
 variable "acr_id" {
-    type = string
-    description = "Acr id that was pulled from the root module"
+  type        = string
+  description = "Acr id that was pulled from the root module"
 }
 
 variable "user_assigned_identity_id" {
