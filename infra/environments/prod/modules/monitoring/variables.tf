@@ -34,7 +34,7 @@ variable "grafana_location" {
 }
 
 variable "grafana_version" {
-  default = "10"
+  default = "11"
 }
 
 variable "is_private_cluster" {
