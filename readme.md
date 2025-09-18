@@ -1,8 +1,9 @@
 <img width="2195" height="1199" alt="diagram-export-9-18-2025-11_08_07-AM" src="https://github.com/user-attachments/assets/2bdbaaee-e70a-4a72-bc81-bb135bcf35cb" />
 
+## Diagram above is focused on the production environment. I’ve left out staging and development to keep it clean :)
 ---
 
-**🌐 Cloud-Native Full-Stack Application on Azure AKS**
+## 🌐 Cloud-Native Full-Stack Application on Azure AKS**
 
 This project demonstrates a **production-grade cloud-native setup** running on **Azure Kubernetes Service (AKS)**. It covers the full lifecycle from infrastructure provisioning to application deployment, using **Terraform, Helm, GitHub Actions CI/CD, and Azure-native services**.
 
