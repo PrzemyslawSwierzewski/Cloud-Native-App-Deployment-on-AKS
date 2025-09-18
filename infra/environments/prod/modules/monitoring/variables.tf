@@ -1,56 +1,61 @@
-variable "environment" {
-  type = object({
-    name    = string
-    rg_name = string
-    location = string
-  })
-  description = "Values for a single environment, including rg_name and location and name of the environment"
-}
-
-variable "vm_memory_bytes" {
-  type        = number
-  description = "Total VM memory in bytes (used for memory alert threshold)"
-  default     = 4000000000
-}
-
-variable "alert_severity_cpu" {
-  type        = number
-  description = "Severity for CPU alerts (1=critical, 2=warning, etc.)"
-  default     = 1
-}
-
-variable "alert_severity_memory" {
-  type        = number
-  description = "Severity for memory alerts (1=critical, 2=warning, etc.)"
-  default     = 1
-}
-variable "kubernetes_cluster_id" {
+variable "cluster_name" {
   type        = string
-  description = "ID of the Kubernetes cluster"
+  description = "The name of the AKS cluster"
 }
 
-variable "acr_id" {
-  type        = string
-  description = "ID of the Azure Container Registry"
+variable "metric_labels_allowlist" {
+  default = null
 }
 
-variable "nsg_id" {
-  type        = string
-  description = "ID of the Network Security Group"
+variable "metric_annotations_allowlist" {
+  default = null
 }
 
-variable "vnet_id" {
-  type        = string
-  description = "ID of the Virtual Network"
+variable "dns_prefix" {
+  default = "k8stest"
 }
 
-variable "vault_key_id" {
-  type        = string
-  description = "ID of the Key Vault"
+variable "grafana_name" {
+  default = "grafana-prometheus"
 }
 
-variable "owner_email_address" {
-  type        = string
-  description = "Email address of the resource owner"
-  default     = "owner@example.com"
+variable "grafana_sku" {
+  default = "Standard"
+}
+
+variable "grafana_location" {
+  default = "eastus"
+}
+
+variable "grafana_version" {
+  default = "10"
+}
+
+variable "is_private_cluster" {
+  default = "false"
+}
+
+variable "monitor_workspace_name" {
+  default = "amprod"
+}
+
+variable "amw_region" {
+  default = "northeurope"
+  description = "Location of the Azure Monitor Workspace"
+}
+
+variable "cluster_region" {
+  default = "eastus"
+  description = "Location of the Azure Kubernetes Cluster"
+}
+
+variable "resource_group_location" {
+  default     = "eastus"
+  description = "Location of the resource group."
+}
+
+variable "enable_windows_recording_rules" {
+  type    = bool
+  default = false
+  description = "Enable UX recording rules for Windows (default: false)"
 }

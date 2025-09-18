@@ -43,6 +43,11 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     service_cidr       = "10.1.0.0/16"      # non-overlapping with VNet
     dns_service_ip     = "10.1.0.10"        # inside service_cidr
   }
+  
+  monitor_metrics {
+    annotations_allowed = var.metric_annotations_allowlist
+    labels_allowed      = var.metric_labels_allowlist
+  }
 
   lifecycle {
     ignore_changes = [
