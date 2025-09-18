@@ -2,7 +2,7 @@
 
 ---
 
-#🌐 Cloud-Native Full-Stack Application on Azure AKS
+**🌐 Cloud-Native Full-Stack Application on Azure AKS**
 
 This project demonstrates a **production-grade cloud-native setup** running on **Azure Kubernetes Service (AKS)**. It covers the full lifecycle from infrastructure provisioning to application deployment, using **Terraform, Helm, GitHub Actions CI/CD, and Azure-native services**.
 
