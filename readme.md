@@ -1,138 +1,142 @@
-# Cloud-Native App Deployment on AKS
+# 🌐 Cloud-Native Full-Stack Application on Azure AKS
 
-## 1) High-level architecture
-
-- **Terraform (modular)** — owns cloud infra only:  
-  Resource groups, VNet/subnets, AKS cluster + node pools, ACR, Key Vault, managed identities, LoadBalancer/Ingress (NGINX via Helm release), storage accounts, monitoring resources.
-
-- **Helm charts repo** — owns app manifests (frontend, backend, DB). Charts versioned and stored in Git.
-
-- **CI/CD pipeline (GitHub Actions)** — builds container images, runs tests, pushes to ACR, and deploys updated images via Helm directly to AKS.
-
-- **Secrets** — managed in Azure Key Vault; referenced by Helm values or Kubernetes secrets.
-
-- **Monitoring / Logging / Security** — Prometheus/Grafana, Fluent Bit → Log Analytics, PodSecurity, NetworkPolicy, HPA.
+This project demonstrates a **production-grade cloud-native setup** running on **Azure Kubernetes Service (AKS)**. It covers the full lifecycle from infrastructure provisioning to application deployment, using **Terraform, Helm, GitHub Actions CI/CD, and Azure-native services**.
 
 ---
 
-## 2) Repo & branching layout
+## 🚀 Features
 
-```
-infra/ → Terraform modules + environments
-  modules/network/
-  modules/aks/
-  modules/acr/
-  modules/keyvault/
-  environments/dev/
-  environments/stage/
-  environments/prod/
-
-charts/ → Helm charts for frontend/backend/DB
-  charts/fullstack/
-
-app/ → app source code (frontend + backend)
-  frontend/ → Dockerfile
-  backend/ → Dockerfile
-
-.github/workflows/ → GitHub Actions to build/push/deploy
-```
+- **Infrastructure as Code** with Terraform (modular, multi-environment: dev, staging, prod).  
+- **Full-stack application(forked from a public repo https://github.com/idurar/mern-admin)**:  
+  - React frontend  
+  - Node.js/Express backend  
+  - MongoDB (StatefulSet with persistent storage)  
+  - NGINX reverse proxy + LoadBalancer for external traffic  
+- **Containerization** with custom Dockerfiles, images pushed to Azure Container Registry (ACR).  
+- **CI/CD Pipelines** with GitHub Actions:  
+  - **Infrastructure pipeline** → `terraform fmt`, validate, plan, security scan, and apply.  
+  - **Application pipeline** → build, push, scan, and deploy with Helm.  
+- **Secrets management** with Azure Key Vault + Managed Identity.  
+- **Security** with RBAC, Key Vault role assignments, and ACR access controls.  
+- **Scalability & Resilience** with AKS autoscaling, HPA (planned).  
+- **Observability** with Prometheus, Grafana, and Azure Monitor (planned).
 
 ---
 
-## 3) Terraform modular layout
+## 🏗️ Architecture
 
-- **AKS module** → cluster, node pools, managed identity, role assignment to ACR (AcrPull), optional ingress controller via `helm_release`.
-- **ACR module** → container registry.
-- **Key Vault module** → secrets for DB credentials, API keys, TLS certs.
-- **Network module** → VNets, subnets, NSGs.
+- **Azure Resources** (per environment):  
+  - Resource Group  
+  - Virtual Network + Subnet + NSG  
+  - AKS cluster (autoscaling node pools)  
+  - ACR with Key Vault–based encryption  
+  - Azure Key Vault (secrets, keys)  
+  - User-Assigned Managed Identity with role assignments  
 
-Infra is fully versioned, environment-specific, and managed via Terraform workspaces or directories.
-
----
-
-## 4) ACR & image pull
-
-- AKS cluster identity is granted `AcrPull` role in Terraform.
-- No `imagePullSecrets` needed; cluster can pull images from ACR automatically.
+- **Application Workloads**:  
+  - Frontend, backend, MongoDB, NGINX  
+  - Deployed via Helm charts with environment-specific overrides
 
 ---
 
-## 5) Helm charts & values
+## 📦 Repository Structure
 
-- Single chart `fullstack/` with templates for frontend, backend, DB.
-
-## 6) CI/CD workflow
-
-**Phase 1 — Build & Push Images (CI)**  
-Triggered on code push to app repo:
-
-```
-Code Push → GitHub Actions →
-├─ Checkout Repo
-├─ Build frontend Docker image
-├─ Build backend Docker image
-├─ Tag images with SHA
-└─ Push images to ACR
-```
-
-**Phase 2 — Deploy Terraform (CD)**
-
-```
-├─ Security Scan (tfsec)
-├─ Terraform
-│  ├─ Terraform Init
-│  ├─ Terraform Format
-│  ├─ Terraform Plan
-│  └─ Terraform Apply (HCP Terraform for remote state)
-└─ Deployment complete (atomic/rollback enabled)
-```
-
-**Phase 3 — Deploy to AKS via Helm (CD)**  
-Triggered after Phase 1 & 2 succeed:
-
-```
-CI Success → GitHub Actions →
-├─ Checkout Charts Repo
-├─ Azure Login & AKS creds
-├─ Helm upgrade --install
-│  ├─ Pass image tags as overrides
-│  └─ Use environment-specific values.yaml
-└─ Deployment complete (atomic/rollback enabled)
-```
+    app/                      # Application source code
+    ├── frontend/             # React frontend + Dockerfile
+    └── backend/              # Node/Express backend + Dockerfile
+    charts/                   # Helm charts for workloads
+    ├── fullstack/            # Main chart
+    ├── values-dev.yaml
+    ├── values-stage.yaml
+    └── values-prod.yaml
+    infra/environments        # Infrastructure code (modular setup)
+    ├── dev/
+    ├── staging/
+    └── prod/
+    .github/workflows/        # CI/CD pipelines
+    ├── build-deploy.yaml     # App pipeline (Docker + Helm)
+    └── terraform.yaml        # Infra pipeline
 
 ---
 
-## 7) Promotion / environments
+## ⚙️ CI/CD Pipelines
 
-- **Dev** → CI deploys automatically to `dev` namespace.  
-- **Stage / Prod** → manual approval or CI triggers on `stage`/`prod` branches.  
-- Each environment has separate Helm values (`values-dev.yaml`, `values-stage.yaml`, `values-prod.yaml`).
+### 🔹 Application Pipeline (`build-deploy.yaml`)
+- Triggered on commits to `dev`, `staging`, or `main`.  
+- Builds and pushes frontend/backend images to ACR (tagged with commit SHA).  
+- Bakes Helm charts with environment-specific overrides.  
+- Deploys workloads to AKS.
 
----
-
-## 8) Secrets & configuration
-
-- Secrets stored in Key Vault.  
-- Helm values reference secrets via CSI driver (mounted as volumes or environment variables).  
-- Avoid storing secrets in repo.
-
----
-
-## 9) Observability & reliability
-
-- Liveness/readiness probes for all apps.  
-- HPA for frontend/backend.  
-- Logging/monitoring via Azure Monitor + Prometheus
-- NetworkPolicies to secure communication.  
-- PodSecurity admission policies enforced.
+### 🔹 Infrastructure Pipeline (`terraform.yaml`)
+- Triggered on changes to Terraform code.  
+- Runs `fmt`, `validate`, `plan`, security scan, and `apply`.  
+- Manages environment-specific resources via modules.
 
 ---
 
-## 10) Optional enhancements
+## 🚦 Getting Started
 
-- Canary or blue-green deployments via Helm flags or rollout annotations.  
-- Automatic rollback using `helm rollback` if deployment fails.  
-- Image scanning and vulnerability check in CI before push.  
-- Optional SBOM generation.
+### Prerequisites
+- [Terraform](https://developer.hashicorp.com/terraform/downloads)  
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)  
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)  
+- [Helm](https://helm.sh/docs/intro/install/)  
+- Docker
+
+### Setup
+1. Clone the repo:
+```bash
+       git clone https://github.com/yourusername/cloud-native-aks.git
+       cd cloud-native-aks
+```
+2. Configure these Secrets in GitHub so the automation for changes can work later:
+```bash
+ARM_CLIENT_ID
+ARM_CLIENT_SECRET
+ARM_SUBSCRIPTION_ID
+ARM_TENANT_ID
+AZURE_CREDENTIALS
+EMAIL_ADDRESS
+TFSEC_GITHUB_TOKEN
+TF_API_TOKEN
+```
+3. Authenticate with Azure:
+```bash 
+       az login
+```
+4. Provision infrastructure (example: dev):
+```bash
+       cd terraform/dev
+       terraform init
+       terraform apply
+```
+5. Build & push Docker images (manual step if not using CI/CD):
+```bash
+       cd app/frontend
+       docker build -t <ACR_NAME>.azurecr.io/frontend:local .
+       docker push <ACR_NAME>.azurecr.io/frontend:local
+```
+6. Deploy with Helm:
+```bash
+       helm upgrade --install fullstack ./charts/fullstack -f charts/values-prod.yaml
+```
+---
+
+## 🔐 Secrets Management
+
+- Secrets (MongoDB, app configs) stored in will be stored in **Azure Key Vault**.  
+- AKS workloads access secrets via **Managed Identity + RBAC**.
+
+---
+
+## 📊 Roadmap
+
+- [x] Modular multi-environment Terraform setup  
+- [x] Helm charts for app workloads  
+- [x] CI/CD pipelines for infra and app  
+- [ ] Implement RBAC, NetworkPolicies, PodSecurity  
+- [ ] Add monitoring with Prometheus + Grafana + Azure Monitor  
+- [ ] Configure Horizontal Pod Autoscaler (HPA)
+- [ ] Move kubernetes secrets from manifest files to **Azure Key Vault**
 
 ---
