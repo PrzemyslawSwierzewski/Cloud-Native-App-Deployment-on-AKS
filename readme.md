@@ -138,7 +138,7 @@ TF_API_TOKEN
 - [x] Helm charts for app workloads  
 - [x] CI/CD pipelines for infra and app  
 - [ ] Implement RBAC, NetworkPolicies, PodSecurity  
-- [ ] Add monitoring with Prometheus + Grafana + Azure Monitor  
+- [x] Add monitoring with Prometheus + Grafana + Azure Monitor  
 - [ ] Configure Horizontal Pod Autoscaler (HPA)
 - [ ] Move kubernetes secrets from manifest files to **Azure Key Vault**
 
