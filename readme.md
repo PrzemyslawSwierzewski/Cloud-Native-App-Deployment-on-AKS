@@ -24,7 +24,7 @@ This project demonstrates a **production-grade cloud-native setup** running on *
 - **Secrets management** with Azure Key Vault + Managed Identity.  
 - **Security** with RBAC, Key Vault role assignments, and ACR access controls.  
 - **Scalability & Resilience** with AKS autoscaling, HPA (planned).  
-- **Observability** with Prometheus, Grafana, and Azure Monitor (planned).
+- This project includes a **dedicated Terraform module** for setting up **Azure-native monitoring** integrated with AKS.
 
 ---
 
@@ -129,6 +129,28 @@ TF_API_TOKEN
 
 - Secrets (MongoDB, app configs) stored in will be stored in **Azure Key Vault**.  
 - AKS workloads access secrets via **Managed Identity + RBAC**.
+
+## 📡 Monitoring & Observability
+
+This project includes a **dedicated Terraform module** for setting up **Azure-native monitoring** integrated with AKS.
+
+### 🔹 What it Provisions
+- **Azure Monitor Workspace (AMW)** → centralized telemetry store.  
+- **Data Collection Endpoints (DCEs)** → manage cross-region/private cluster ingestion.  
+- **Data Collection Rules (DCRs) + Associations** → route Kubernetes metrics to AMW.  
+- **Prometheus Recording Rules**:
+  - **Linux Nodes**
+  - **Windows Nodes**
+  - **Kubernetes Cluster**
+  - **User Experience (UX) metrics**  
+- **Grafana Integration**:
+  - Native Azure integration with AMW
+  - Role assignments (`Monitoring Data Reader`) for secure access
+
+### 🔹 Why This Matters
+- Provides **end-to-end observability** using **Azure Monitor Managed Prometheus**.  
+- Collects, processes, and stores cluster-level metrics without needing to run and maintain your own Prometheus stack.  
+- Seamlessly integrates with **Grafana dashboards** for visualization.  
 
 ---
 
