@@ -18,22 +18,16 @@ resource "azurerm_role_assignment" "tf_keyvault_secrets_access" {
   }
 }
 
-resource "azurerm_role_assignment" "tf_keyvault_keys_access" {
-  scope                = var.vault_key_id
-  role_definition_name = "Key Vault Crypto User"
-  principal_id         = data.azurerm_client_config.current.object_id
+resource "azurerm_key_vault_access_policy" "aks_secret_access" {
+  key_vault_id = var.vault_key_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.user_assigned_identity_id
 
-  lifecycle {
-    ignore_changes = [
-      principal_id,
-    ]
-  }
-}
-
-resource "azurerm_role_assignment" "aks_node_keyvault_access" {
-  scope                = var.vault_key_id
-  role_definition_name = "Key Vault Reader"
-  principal_id         = var.user_assigned_identity_id
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+  
 }
 
 resource "azurerm_role_assignment" "aks_acr_pull" {
@@ -42,14 +36,3 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   principal_id         = var.user_assigned_identity_id
 }
 
-resource "azurerm_role_assignment" "tf_acr_push" {
-  scope                = var.acr_id
-  role_definition_name = "AcrPush"
-  principal_id         = data.azurerm_client_config.current.object_id
-
-  lifecycle {
-    ignore_changes = [
-      principal_id,
-    ]
-  }
-}

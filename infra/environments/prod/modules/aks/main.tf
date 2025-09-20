@@ -55,5 +55,11 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     ]
   }
 
+  addon_profile {
+    azure_keyvault_secrets_provider {
+      enabled = true
+    }
+  }
+
   depends_on = [azurerm_role_assignment.aks_mi_operator]
 }
