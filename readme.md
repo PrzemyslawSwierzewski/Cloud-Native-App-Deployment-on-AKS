@@ -96,14 +96,14 @@ This project demonstrates a **production-grade cloud-native setup** running on *
 ```
 2. Configure these Secrets in GitHub so the automation for changes can work later:
 ```bash
-ARM_CLIENT_ID
-ARM_CLIENT_SECRET
-ARM_SUBSCRIPTION_ID
-ARM_TENANT_ID
-AZURE_CREDENTIALS
-EMAIL_ADDRESS
-TFSEC_GITHUB_TOKEN
-TF_API_TOKEN
+    ARM_CLIENT_ID
+    ARM_CLIENT_SECRET
+    ARM_SUBSCRIPTION_ID
+    ARM_TENANT_ID
+    AZURE_CREDENTIALS
+    EMAIL_ADDRESS
+    TFSEC_GITHUB_TOKEN
+    TF_API_TOKEN
 ```
 3. Authenticate with Azure:
 ```bash 
@@ -115,11 +115,25 @@ TF_API_TOKEN
        terraform init
        terraform apply
 ```
-5. Build & push Docker images:
+5. Configure these Secrets in GitHub so the application can work
+```bash
+    NODE_ENV: "development"
+    PORT: "4000"
+    SECRET: "hackthoon"
+    KEY: "idurar"
+    JWT_SCHEME: "jwt"
+    JWT_TOKEN_PREFIX: "Bearer"
+    JWT_SECRET: "thiscanbechangedlater123654789"
+    JWT_TOKEN_EXPIRATION: "18000000"
+    JWT_TOKEN_HASH_ALGO: "SHA-256"
+    DATABASE: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
+    MONGO_DB: "mydb"
+```
+6. Build & push Docker images:
 ```bash
        Best option to build the images is to run the workflow
 ```
-6. Deploy with Helm:
+7. Deploy with Helm:
 ```bash
        Best option to deploy the application is to run the workflow
 ```
