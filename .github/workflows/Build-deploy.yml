@@ -17,9 +17,9 @@ jobs:
       AKS_NAME: ${{ steps.set-vars.outputs.AKS_NAME }}
       RG_NAME: ${{ steps.set-vars.outputs.RG_NAME }}
       CHART_OVERRIDE_PATH: ${{ steps.set-vars.outputs.CHART_OVERRIDE_PATH }}
-      key_vault_name: ${{ vars.KEY_VAULT_NAME }}
-      user_assigned_identity_client_id: ${{ vars.USER_ASSIGNED_IDENTITY_CLIENT_ID }}
-      tenant_id: ${{ vars.TENANT_ID }}
+      key_vault_name: ${{ steps.set-vars.outputs.KEY_VAULT_NAME }}
+      user_assigned_identity_client_id: ${{ steps.set-vars.outputs.USER_ASSIGNED_IDENTITY_CLIENT_ID }}
+      tenant_id: ${{ steps.set-vars.outputs.TENANT_ID }}
     steps:
       - id: set-vars
         run: |
@@ -81,9 +81,9 @@ jobs:
       AKS_NAME: ${{ needs.set-env.outputs.AKS_NAME }}
       RG_NAME: ${{ needs.set-env.outputs.RG_NAME }}
       CHART_OVERRIDE_PATH: ${{ needs.set-env.outputs.CHART_OVERRIDE_PATH }}
-      key_vault_name: ${{ needs.set-env.outputs.KEY_VAULT_NAME }}
-      user_assigned_identity_client_id: ${{ needs.set-env.outputs.USER_ASSIGNED_IDENTITY_CLIENT_ID }}
-      tenant_id: ${{ needs.set-env.outputs.TENANT_ID }}
+      key_vault_name: ${{ needs.set-env.outputs.key_vault_name }}
+      user_assigned_identity_client_id: ${{ needs.set-env.outputs.user_assigned_identity_client_id }}
+      tenant_id: ${{ needs.set-env.outputs.tenant_id }}
     steps:
       - uses: actions/checkout@v4
 

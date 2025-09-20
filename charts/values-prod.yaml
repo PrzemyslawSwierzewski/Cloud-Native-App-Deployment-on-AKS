@@ -145,31 +145,31 @@ secrets:
       - secretName: mongo-secret
         type: Opaque
         data:
-          - objectName: mongo-database-uri
+          - objectName: DATABASE
             key: DATABASE
-          - objectName: mongo-database-name
+          - objectName: MONGO_DB
             key: MONGO_DB
       - secretName: backend-secret
         type: Opaque
         data:
-          - objectName: backend-node-env
-            key: NODE_ENV
-          - objectName: backend-port
+          - objectName: NODE-ENV
+            key: NODE-ENV
+          - objectName: PORT
             key: PORT
-          - objectName: backend-secret-key
+          - objectName: SECRET
             key: SECRET
-          - objectName: backend-key
+          - objectName: KEY
             key: KEY
-          - objectName: backend-jwt-scheme
-            key: JWT_SCHEME
-          - objectName: backend-jwt-token-prefix
-            key: JWT_TOKEN_PREFIX
-          - objectName: backend-jwt-secret
-            key: JWT_SECRET
-          - objectName: backend-jwt-expiration
-            key: JWT_TOKEN_EXPIRATION
-          - objectName: backend-jwt-hash
-            key: JWT_TOKEN_HASH_ALGO
+          - objectName: JWT-SCHEME
+            key: JWT-SCHEME
+          - objectName: JWT-TOKEN-PREFIX
+            key: JWT-TOKEN-PREFIX
+          - objectName: JWT-SECRET
+            key: JWT-SECRET
+          - objectName: JWT-TOKEN-EXPIRATION
+            key: JWT-TOKEN-EXPIRATION
+          - objectName: JWT-TOKEN-HASH-ALGO
+            key: JWT-TOKEN-HASH-ALGO
     parameters:
       useVMManagedIdentity: "true"
       userAssignedIdentityID: ""
@@ -178,26 +178,26 @@ secrets:
       cloudName: ""
       objects: |
         array:
-          - objectName: mongo-database-uri
+          - objectName: DATABASE
             objectType: secret
-          - objectName: mongo-database-name
+          - objectName: MONGO_DB
             objectType: secret
-          - objectName: backend-node-env
+          - objectName: NODE-ENV
             objectType: secret
-          - objectName: backend-port
+          - objectName: PORT
             objectType: secret
-          - objectName: backend-secret-key
+          - objectName: SECRET
             objectType: secret
-          - objectName: backend-key
+          - objectName: KEY
             objectType: secret
-          - objectName: backend-jwt-scheme
+          - objectName: JWT-SCHEME
             objectType: secret
-          - objectName: backend-jwt-token-prefix
+          - objectName: JWT-TOKEN-PREFIX
             objectType: secret
-          - objectName: backend-jwt-secret
+          - objectName: JWT-SECRET
             objectType: secret
-          - objectName: backend-jwt-expiration
+          - objectName: JWT-TOKEN-EXPIRATION
             objectType: secret
-          - objectName: backend-jwt-hash
+          - objectName: JWT-TOKEN-HASH-ALGO
             objectType: secret
       tenantId: ""
