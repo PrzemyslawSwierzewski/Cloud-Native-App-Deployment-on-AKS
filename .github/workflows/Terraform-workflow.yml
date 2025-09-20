@@ -92,7 +92,7 @@ jobs:
           -var "MONGO_DB=${{ secrets.MONGO_DB }}"
 
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'push' && github.ref == 'refs/heads/dev || github.event_name == 'push' && github.ref == 'refs/heads/staging
         run: |
           cd ./infra
           terraform apply -auto-approve -input=false \
@@ -111,7 +111,7 @@ jobs:
 
       - name: Capture Outputs
         id: tf-outputs
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'push' && github.ref == 'refs/heads/dev || github.event_name == 'push' && github.ref == 'refs/heads/staging
         run: |
           cd ./infra
           echo "PROD_ACR_NAME=$(terraform output -raw prod_acr)" >> $GITHUB_ENV
@@ -125,11 +125,11 @@ jobs:
           echo "STAGING_RG_NAME=$(terraform output -raw staging_resource_group)" >> $GITHUB_ENV
 
       - name: Install GitHub CLI
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'push' && github.ref == 'refs/heads/dev || github.event_name == 'push' && github.ref == 'refs/heads/staging
         run: sudo apt-get update && sudo apt-get install -y gh
 
       - name: Save Variables to GitHub
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'push' && github.ref == 'refs/heads/dev || github.event_name == 'push' && github.ref == 'refs/heads/staging
         run: |
           gh variable set PROD_ACR_NAME --body "$PROD_ACR_NAME"
           gh variable set PROD_AKS_NAME --body "$PROD_AKS_NAME"
