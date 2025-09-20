@@ -24,8 +24,8 @@ resource "azurerm_key_vault_access_policy" "aks_secret_access" {
   object_id    = var.user_assigned_identity_id
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 
