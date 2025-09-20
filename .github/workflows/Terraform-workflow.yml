@@ -127,6 +127,9 @@ jobs:
           echo "STAGING_ACR_NAME=$(terraform output -raw staging_acr)" >> $GITHUB_ENV
           echo "STAGING_AKS_NAME=$(terraform output -raw staging_aks_cluster_name)" >> $GITHUB_ENV
           echo "STAGING_RG_NAME=$(terraform output -raw staging_resource_group)" >> $GITHUB_ENV
+          echo "KEY_VAULT_NAME=$(terraform output -raw key_vault_name)" >> $GITHUB_ENV
+          echo "user_assigned_identity_client_id=$(terraform output -raw user_assigned_identity_client_id)" >> $GITHUB_ENV
+          echo "TENANT_ID=$(terraform output -raw tenant_id)" >> $GITHUB_ENV
 
       - name: Install GitHub CLI
         if: >

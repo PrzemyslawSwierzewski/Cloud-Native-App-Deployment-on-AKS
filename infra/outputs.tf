@@ -10,6 +10,20 @@ output "prod_aks_cluster_name" {
   value = module.prod_aks.aks_cluster_name
 }
 
+output "key_vault_name" {
+  value = module.prod_keyvault.key_vault_name
+}
+
+output "user_assigned_identity_client_id" {
+  value = module.prod_identity.client_id
+}
+
+data "azurerm_client_config" "current" {}
+
+output "tenant_id" {
+  value = data.azurerm_client_config.current.tenant_id
+}
+
 # output "staging_resource_group" {
 #   value = local.environments.stage.rg_name
 # }

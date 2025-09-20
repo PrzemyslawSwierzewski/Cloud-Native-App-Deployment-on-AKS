@@ -32,4 +32,15 @@ spec:
             - secretRef:
                 name: {{ $backend.secretName.mongo }}
             - secretRef:
-                name: {{ $backend.secretName.backend }} #check of a build-deploy workflow
+                name: {{ $backend.secretName.backend }}
+          volumeMounts:
+            - name: {{ .Values.backend-deployment.volumes[0].name }}
+              mountPath: {{ .Values.backend-deployment.volumes[0].mountPath }}
+              readOnly: true
+      volumes:
+        - name: {{ .Values.backend-deployment.volumes[0].name }}
+          csi:
+            driver: {{ .Values.backend-deployment.volumes[0].csi.driver }}
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.backend-deployment.volumes[0].csi.volumeAttributes.secretProviderClass }}
