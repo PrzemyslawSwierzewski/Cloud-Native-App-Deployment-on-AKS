@@ -9,7 +9,10 @@ on:
     paths:
       - 'app/**'
       - 'charts/**'
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Terraform workflow"]
+    types:
+      - completed
 
 env:
   CHART_PATH: "./charts/fullstack"
@@ -22,6 +25,9 @@ jobs:
       AKS_NAME: ${{ steps.set-vars.outputs.AKS_NAME }}
       RG_NAME: ${{ steps.set-vars.outputs.RG_NAME }}
       CHART_OVERRIDE_PATH: ${{ steps.set-vars.outputs.CHART_OVERRIDE_PATH }}
+      key_vault_name: ${{ vars.KEY_VAULT_NAME }}
+      user_assigned_identity_client_id: ${{ vars.USER_ASSIGNED_IDENTITY_CLIENT_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
     steps:
       - id: set-vars
         run: |

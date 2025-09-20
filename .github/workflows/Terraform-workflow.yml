@@ -12,6 +12,10 @@ on:
     paths:
       - 'infra/**'
 
+concurrency:
+  group: terraform-${{ github.ref_name }}
+  cancel-in-progress: false
+
 env:
   TF_VAR_EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
   TF_VAR_arm_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
@@ -127,8 +131,8 @@ jobs:
           echo "STAGING_ACR_NAME=$(terraform output -raw staging_acr)" >> $GITHUB_ENV
           echo "STAGING_AKS_NAME=$(terraform output -raw staging_aks_cluster_name)" >> $GITHUB_ENV
           echo "STAGING_RG_NAME=$(terraform output -raw staging_resource_group)" >> $GITHUB_ENV
-          echo "KEY_VAULT_NAME=$(terraform output -raw key_vault_name)" >> $GITHUB_ENV
-          echo "user_assigned_identity_client_id=$(terraform output -raw user_assigned_identity_client_id)" >> $GITHUB_ENV
+          echo "PROD_KEY_VAULT_NAME=$(terraform output -raw prod_key_vault_name)" >> $GITHUB_ENV
+          echo "PROD_USER_ASSIGNED_IDENTITY_CLIENT_ID=$(terraform output -raw prod_user_assigned_identity_client_id)" >> $GITHUB_ENV
           echo "TENANT_ID=$(terraform output -raw tenant_id)" >> $GITHUB_ENV
 
       - name: Install GitHub CLI
@@ -151,6 +155,9 @@ jobs:
           gh variable set STAGING_ACR_NAME --body "$STAGING_ACR_NAME"
           gh variable set STAGING_AKS_NAME --body "$STAGING_AKS_NAME"
           gh variable set STAGING_RG_NAME --body "$STAGING_RG_NAME"
+          gh variable set PROD_KEY_VAULT_NAME --body "$KEY_VAULT_NAME"
+          gh variable set PROD_user_assigned_identity_client_id --body "$user_assigned_identity_client_id"
+          gh variable set TENANT_ID --body "$TENANT_ID"
 
         env:
           PROD_ACR_NAME: ${{ env.PROD_ACR_NAME }}
@@ -162,3 +169,6 @@ jobs:
           STAGING_ACR_NAME: ${{ env.STAGING_ACR_NAME }}
           STAGING_AKS_NAME: ${{ env.STAGING_AKS_NAME }}
           STAGING_RG_NAME: ${{ env.STAGING_RG_NAME }}
+          KEY_VAULT_NAME: ${{ env.KEY_VAULT_NAME }}
+          user_assigned_identity_client_id: ${{ env.user_assigned_identity_client_id }}
+          TENANT_ID: ${{ env.TENANT_ID }}

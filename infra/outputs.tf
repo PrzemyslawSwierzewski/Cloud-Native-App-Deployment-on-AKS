@@ -10,11 +10,11 @@ output "prod_aks_cluster_name" {
   value = module.prod_aks.aks_cluster_name
 }
 
-output "key_vault_name" {
+output "prod_key_vault_name" {
   value = module.prod_keyvault.key_vault_name
 }
 
-output "user_assigned_identity_client_id" {
+output "prod_user_assigned_identity_client_id" {
   value = module.prod_identity.client_id
 }
 
