@@ -20,6 +20,20 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GITHUB_TOKEN: ${{ secrets.TFSEC_GITHUB_TOKEN }}
+  # Node.js / Backend Variables
+  TF_VAR_NODE_ENV: ${{ secrets.NODE_ENV }}
+  TF_VAR_PORT: ${{ secrets.PORT }}
+  TF_VAR_SECRET: ${{ secrets.SECRET }}
+  TF_VAR_KEY: ${{ secrets.KEY }}
+  TF_VAR_KEY_JWT_SCHEME: ${{ secrets.KEY_JWT_SCHEME }}
+  TF_VAR_JWT_TOKEN_PREFIX: ${{ secrets.JWT_TOKEN_PREFIX }}
+  TF_VAR_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  TF_VAR_JWT_TOKEN_EXPIRATION: ${{ secrets.JWT_TOKEN_EXPIRATION }}
+  TF_VAR_JWT_TOKEN_HASH_ALGO: ${{ secrets.JWT_TOKEN_HASH_ALGO }}
+
+  # MongoDB Variables
+  TF_VAR_DATABASE: ${{ secrets.DATABASE }}
+  TF_VAR_MONGO_DB: ${{ secrets.MONGO_DB }}
 
 jobs:
   tfsec:
@@ -64,14 +78,36 @@ jobs:
         run: |
           cd ./infra
           terraform plan -input=false \
-          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}" \
+          -var "NODE_ENV=${{ secrets.NODE_ENV }}" \
+          -var "PORT=${{ secrets.PORT }}" \
+          -var "SECRET=${{ secrets.SECRET }}" \
+          -var "KEY=${{ secrets.KEY }}" \
+          -var "KEY_JWT_SCHEME=${{ secrets.KEY_JWT_SCHEME }}" \
+          -var "JWT_TOKEN_PREFIX=${{ secrets.JWT_TOKEN_PREFIX }}" \
+          -var "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+          -var "JWT_TOKEN_EXPIRATION=${{ secrets.JWT_TOKEN_EXPIRATION }}" \
+          -var "JWT_TOKEN_HASH_ALGO=${{ secrets.JWT_TOKEN_HASH_ALGO }}" \
+          -var "DATABASE=${{ secrets.DATABASE }}" \
+          -var "MONGO_DB=${{ secrets.MONGO_DB }}"
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cd ./infra
           terraform apply -auto-approve -input=false \
-          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}"
+          -var "owner_email_address=${{ secrets.EMAIL_ADDRESS }}" \
+          -var "NODE_ENV=${{ secrets.NODE_ENV }}" \
+          -var "PORT=${{ secrets.PORT }}" \
+          -var "SECRET=${{ secrets.SECRET }}" \
+          -var "KEY=${{ secrets.KEY }}" \
+          -var "KEY_JWT_SCHEME=${{ secrets.KEY_JWT_SCHEME }}" \
+          -var "JWT_TOKEN_PREFIX=${{ secrets.JWT_TOKEN_PREFIX }}" \
+          -var "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+          -var "JWT_TOKEN_EXPIRATION=${{ secrets.JWT_TOKEN_EXPIRATION }}" \
+          -var "JWT_TOKEN_HASH_ALGO=${{ secrets.JWT_TOKEN_HASH_ALGO }}" \
+          -var "DATABASE=${{ secrets.DATABASE }}" \
+          -var "MONGO_DB=${{ secrets.MONGO_DB }}"
 
       - name: Capture Outputs
         id: tf-outputs

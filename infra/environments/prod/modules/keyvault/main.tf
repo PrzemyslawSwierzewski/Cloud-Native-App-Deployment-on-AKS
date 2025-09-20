@@ -30,3 +30,69 @@ resource "azurerm_key_vault_key" "prod_key" {
   key_size     = 2048
   key_opts     = ["encrypt", "decrypt", "wrapKey", "unwrapKey"]
 }
+
+resource "azurerm_key_vault_secret" "backend_NODE_ENV" {
+  name         = "NODE_ENV"
+  value        = var.backend_NODE_ENV
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_PORT" {
+  name         = "PORT"
+  value        = var.backend_PORT
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_SECRET" {
+  name         = "SECRET"
+  value        = var.backend_SECRET
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_KEY" {
+  name         = "KEY"
+  value        = var.backend_KEY
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_KEY_JWT_SCHEME" {
+  name         = "KEY_JWT_SCHEME"
+  value        = var.backend_KEY_JWT_SCHEME
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_PREFIX" {
+  name         = "JWT_TOKEN_PREFIX"
+  value        = var.backend_JWT_TOKEN_PREFIX
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_JWT_SECRET" {
+  name         = "JWT_SECRET"
+  value        = var.backend_JWT_SECRET
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_EXPIRATION" {
+  name         = "JWT_TOKEN_EXPIRATION"
+  value        = var.backend_JWT_TOKEN_EXPIRATION
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_HASH_ALGO" {
+  name         = "JWT_TOKEN_HASH_ALGO"
+  value        = var.backend_JWT_TOKEN_HASH_ALGO
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "mongo_DATABASE" {
+  name         = "DATABASE"
+  value        = var.mongo_DATABASE
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
+
+resource "azurerm_key_vault_secret" "mongo_MONGO_DB" {
+  name         = "MONGO_DB"
+  value        = var.mongo_MONGO_DB
+  key_vault_id = azurerm_key_vault.prodkeyvault.id
+}
