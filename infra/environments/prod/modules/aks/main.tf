@@ -56,7 +56,7 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
   }
 
   key_vault_secrets_provider {
-    enabled = true
+    secret_rotation_enabled = false
   }
 
   depends_on = [azurerm_role_assignment.aks_mi_operator]
