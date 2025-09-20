@@ -115,7 +115,7 @@ This project demonstrates a **production-grade cloud-native setup** running on *
        terraform init
        terraform apply
 ```
-5. Configure these Secrets in GitHub so the application can work
+5. Configure these secrets in GitHub to ensure the application functions correctly. They will be passed from the Terraform workflow to Azure Key Vault, and later to your Helm build.
 ```bash
     NODE_ENV: "development"
     PORT: "4000"
