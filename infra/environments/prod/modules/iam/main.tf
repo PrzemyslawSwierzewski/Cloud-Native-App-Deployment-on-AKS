@@ -27,7 +27,6 @@ resource "azurerm_key_vault_access_policy" "aks_secret_access" {
     "get",
     "list"
   ]
-  
 }
 
 resource "azurerm_role_assignment" "aks_acr_pull" {
