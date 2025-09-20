@@ -9,10 +9,10 @@ on:
     paths:
       - 'app/**'
       - 'charts/**'
-  workflow_run:
-    workflows: ["Terraform workflow"]
-    types:
-      - completed
+
+concurrency:
+  group: terraform-${{ github.ref_name }}
+  cancel-in-progress: false
 
 env:
   CHART_PATH: "./charts/fullstack"
