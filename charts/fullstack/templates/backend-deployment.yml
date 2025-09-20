@@ -34,13 +34,13 @@ spec:
             - secretRef:
                 name: {{ $backend.secretName.backend }}
           volumeMounts:
-            - name: {{ $backend.volumes[0].name }}
-              mountPath: {{ $backend.volumes[0].mountPath }}
+            - name: {{ $backend.volumes.name }}
+              mountPath: {{ $backend.volumes.mountPath }}
               readOnly: true
       volumes:
-        - name: {{ $backend.volumes[0].name }}
+        - name: {{ $backend.volumes.name }}
           csi:
-            driver: {{ $backend.volumes[0].csi.driver }}
+            driver: {{ $backend.volumes.driver }}
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ $backend.volumes[0].csi.volumeAttributes.secretProviderClass }}
+              secretProviderClass: {{ $backend.volumes.secretProviderClass }}

@@ -17,13 +17,11 @@ backend-deployment:
     mongo: mongo-secret
     backend: backend-secret
   volumes:
-    - name: secrets-store-inline
-      csi:
-        driver: secrets-store.csi.k8s.io
-        readOnly: true
-        volumeAttributes:
-          secretProviderClass: "fullstack-secrets"
-      mountPath: /mnt/secrets-store
+    name: secrets-store-inline
+    driver: secrets-store.csi.k8s.io
+    readOnly: true
+    secretProviderClass: "fullstack-secrets"
+    mountPath: /mnt/secrets-store
 
 backend-service:
   name: backend-service
