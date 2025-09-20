@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "infra_rgs" {
 }
 
 ############################## DEV ENVIRONMENT ###############################################
-# The dev environment is for development, currently not in use as my subscription is limited to 4 cores
+# The dev environment is for development, currently not in use as my subscription is limited to 4 cores last fix
 ##############################################################################################
 
 # module "dev_networking" {
