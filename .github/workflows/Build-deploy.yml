@@ -1,18 +1,10 @@
 name: Build & Deploy to AKS
 
 on:
-  push:
-    branches:
-      - main
-      - staging
-      - dev
-    paths:
-      - 'app/**'
-      - 'charts/**'
-
-concurrency:
-  group: terraform-${{ github.ref_name }}
-  cancel-in-progress: false
+  workflow_run:
+    workflows: ["Terraform workflow"]
+    types:
+      - completed
 
 env:
   CHART_PATH: "./charts/fullstack"
