@@ -16,20 +16,14 @@ backend-deployment:
   secretName:
     mongo: mongo-secret
     backend: backend-secret
-
-backend-secret:
-  name: backend-secret
-  type: Opaque
-  data:
-    NODE_ENV: "development"
-    PORT: "4000"
-    SECRET: "hackthoon"
-    KEY: "idurar"
-    JWT_SCHEME: "jwt"
-    JWT_TOKEN_PREFIX: "Bearer"
-    JWT_SECRET: "thiscanbechangedlater123654789"
-    JWT_TOKEN_EXPIRATION: "18000000"
-    JWT_TOKEN_HASH_ALGO: "SHA-256"
+  volumes:
+    - name: secrets-store-inline
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "fullstack-secrets"
+      mountPath: /mnt/secrets-store
 
 backend-service:
   name: backend-service
@@ -63,13 +57,6 @@ frontend-service:
   spec:
     port: 80
     targetPort: 80
-
-mongo-secret:
-  name: mongo-secret
-  type: Opaque
-  data:
-    DATABASE: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
-    MONGO_DB: "mydb"
 
 mongo-service:
   name: mongo
@@ -151,3 +138,68 @@ nginx-loadbalancer:
     targetPort: 80
     protocol: TCP
     type: LoadBalancer
+
+secrets:
+  secretProviderClass:
+    name: fullstack-secrets
+    provider: azure
+    secretObjects:
+      - secretName: mongo-secret
+        type: Opaque
+        data:
+          - objectName: mongo-database-uri
+            key: DATABASE
+          - objectName: mongo-database-name
+            key: MONGO_DB
+      - secretName: backend-secret
+        type: Opaque
+        data:
+          - objectName: backend-node-env
+            key: NODE_ENV
+          - objectName: backend-port
+            key: PORT
+          - objectName: backend-secret-key
+            key: SECRET
+          - objectName: backend-key
+            key: KEY
+          - objectName: backend-jwt-scheme
+            key: JWT_SCHEME
+          - objectName: backend-jwt-token-prefix
+            key: JWT_TOKEN_PREFIX
+          - objectName: backend-jwt-secret
+            key: JWT_SECRET
+          - objectName: backend-jwt-expiration
+            key: JWT_TOKEN_EXPIRATION
+          - objectName: backend-jwt-hash
+            key: JWT_TOKEN_HASH_ALGO
+    parameters:
+      useVMManagedIdentity: "true"
+      userAssignedIdentityID: ""
+      usePodIdentity: "false"
+      keyvaultName: ""
+      cloudName: ""
+      objects: |
+        array:
+          - objectName: mongo-database-uri
+            objectType: secret
+          - objectName: mongo-database-name
+            objectType: secret
+          - objectName: backend-node-env
+            objectType: secret
+          - objectName: backend-port
+            objectType: secret
+          - objectName: backend-secret-key
+            objectType: secret
+          - objectName: backend-key
+            objectType: secret
+          - objectName: backend-jwt-scheme
+            objectType: secret
+          - objectName: backend-jwt-token-prefix
+            objectType: secret
+          - objectName: backend-jwt-secret
+            objectType: secret
+          - objectName: backend-jwt-expiration
+            objectType: secret
+          - objectName: backend-jwt-hash
+            objectType: secret
+      tenantId: ""
