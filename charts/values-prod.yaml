@@ -79,10 +79,8 @@ mongo-statefulset:
     limits:
       cpu: 500m
       memory: 1Gi
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    storageClassName: managed
+  accessModes:
+    - ReadWriteOnce
 
 nginx-configmap:
   name: nginx-config

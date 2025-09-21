@@ -34,11 +34,11 @@ spec:
         - name: {{ $mongo.volumeMounts.name }}
           mountPath: {{ $mongo.volumeMounts.mountPath }}
   volumeClaimTemplates:
-  - metadata:
-      name: {{ $mongo.volumeMounts.name }}
-    spec:
-      accessModes: {{ $mongo.spec.accessModes }}
-      storageClassName: {{ $mongo.spec.storageClassName }}
-      resources:
-        requests:
-          storage: {{ $mongo.storage.size }}
+    - metadata:
+        name: {{ $mongo.volumeMounts.name }}
+      spec:
+        accessModes: {{ $mongo.accessModes }}
+        storageClassName: {{ $mongo.storage.storageClassName }}
+        resources:
+          requests:
+            storage: {{ $mongo.storage.size }}
