@@ -86,7 +86,7 @@ variable "KEY" {
   sensitive   = true
 }
 
-variable "KEY_JWT_SCHEME" {
+variable "JWT_SCHEME" {
   description = "JWT scheme key used in backend authentication"
   type        = string
 }
