@@ -31,7 +31,7 @@ variable "default_node_pools" {
     prod = {
       name       = "nodepool"
       node_count = 1
-      vm_size    = "Standard_d4as_v5"
+      vm_size    = "standard_a4_v2"
     }
   }
 }
