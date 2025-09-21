@@ -68,7 +68,7 @@ mongo-statefulset:
     image: mongo:5
   storage:
     size: 5Gi
-    storageClassName: managed-premium
+    storageClassName: managed-standard
   volumeMounts:
     mountPath: /data/db
     name: mongo-storage
@@ -82,7 +82,7 @@ mongo-statefulset:
   spec:
     accessModes:
       - ReadWriteOnce
-    storageClassName: managed-premium
+    storageClassName: managed-standard
 
 nginx-configmap:
   name: nginx-config
