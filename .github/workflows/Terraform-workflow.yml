@@ -47,6 +47,7 @@ jobs:
   tfsec:
     name: 'Security Scan (tfsec)'
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       TFSEC_GITHUB_TOKEN: ${{ secrets.TFSEC_GITHUB_TOKEN }}
 

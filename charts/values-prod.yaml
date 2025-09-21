@@ -175,29 +175,40 @@ secrets:
       userAssignedIdentityID: ""
       usePodIdentity: "false"
       keyvaultName: ""
-      cloudName: ""
+      cloudName: "AzurePublicCloud"
+      tenantId: ""
       objects: |
         array:
-          - objectName: DATABASE
+          - |
+            objectName: DATABASE
             objectType: secret
-          - objectName: MONGO_DB
+          - |
+            objectName: MONGO_DB
             objectType: secret
-          - objectName: NODE-ENV
+          - |
+            objectName: NODE-ENV
             objectType: secret
-          - objectName: PORT
+          - |
+            objectName: PORT
             objectType: secret
-          - objectName: SECRET
+          - |
+            objectName: SECRET
             objectType: secret
-          - objectName: KEY
+          - |
+            objectName: KEY
             objectType: secret
-          - objectName: JWT-SCHEME
+          - |
+            objectName: JWT-SCHEME
             objectType: secret
-          - objectName: JWT-TOKEN-PREFIX
+          - |
+            objectName: JWT-TOKEN-PREFIX
             objectType: secret
-          - objectName: JWT-SECRET
+          - |
+            objectName: JWT-SECRET
             objectType: secret
-          - objectName: JWT-TOKEN-EXPIRATION
+          - |
+            objectName: JWT-TOKEN-EXPIRATION
             objectType: secret
-          - objectName: JWT-TOKEN-HASH-ALGO
+          - |
+            objectName: JWT-TOKEN-HASH-ALGO
             objectType: secret
-      tenantId: ""
