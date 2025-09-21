@@ -158,22 +158,27 @@ module "prod_acr" {
   depends_on = [azurerm_resource_group.infra_rgs, module.prod_keyvault]
 }
 
+################################## PROD MONITORING ###############################################
+# module for monitoring the prod environment, currently commented out to save resources
+##############################################################################################
+# module "prod_monitoring" {
+#   source       = "./environments/prod/modules/monitoring"
+#   cluster_name = module.prod_aks.aks_cluster_name
+#   environment  = local.environments.prod
+#   cluster_id   = module.prod_aks.kubernetes_cluster_id
+#
+#   depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
+# }
+################################## END PROD MONITORING ###############################################
 
 
-############################################################################################################
-# The monitoring module is commented out for now, as I want to implement the monitoring solution as below:
-# https://github.com/Azure/prometheus-collector/blob/main/AddonTerraformTemplate/main.tf
-############################################################################################################
 
 
-module "prod_monitoring" {
-  source       = "./environments/prod/modules/monitoring"
-  cluster_name = module.prod_aks.aks_cluster_name
-  environment  = local.environments.prod
-  cluster_id   = module.prod_aks.kubernetes_cluster_id
 
-  depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
-}
+
+############################## STAGE ENVIRONMENT ###############################################
+# The stage environment is for staging, currently not in use as my subscription is limited to 4 cores
+##############################################################################################
 
 # module "stage_networking" {
 #   source      = "./environments/stage/modules/networking"

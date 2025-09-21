@@ -183,7 +183,7 @@ secrets:
             objectName: DATABASE
             objectType: secret
           - |
-            objectName: MONGO_DB
+            objectName: MONGO-DB
             objectType: secret
           - |
             objectName: NODE-ENV

@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js --ignore public/",
-    "production": "NODE_ENV=production",
+    "production": "NODE-ENV=production",
     "setup": "node ./setup/setup.js"
   },
   "dependencies": {
