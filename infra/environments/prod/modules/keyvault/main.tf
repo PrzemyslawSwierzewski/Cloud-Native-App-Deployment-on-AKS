@@ -56,7 +56,7 @@ resource "azurerm_key_vault_secret" "backend_KEY" {
 }
 
 resource "azurerm_key_vault_secret" "backend_KEY_JWT_SCHEME" {
-  name         = "KEY-JWT-SCHEME"
+  name         = "JWT-SCHEME"
   value        = var.backend_KEY_JWT_SCHEME
   key_vault_id = azurerm_key_vault.prodkeyvault.id
 }
