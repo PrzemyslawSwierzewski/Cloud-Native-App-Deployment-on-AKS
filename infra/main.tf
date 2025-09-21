@@ -122,15 +122,15 @@ module "prod_keyvault" {
   backend_PORT                 = var.PORT
   backend_SECRET               = var.SECRET
   backend_KEY                  = var.KEY
-  backend_KEY_JWT_SCHEME       = var.KEY_JWT_SCHEME
+  backend_JWT_SCHEME           = var.JWT_SCHEME
   backend_JWT_TOKEN_PREFIX     = var.JWT_TOKEN_PREFIX
   backend_JWT_SECRET           = var.JWT_SECRET
   backend_JWT_TOKEN_EXPIRATION = var.JWT_TOKEN_EXPIRATION
   backend_JWT_TOKEN_HASH_ALGO  = var.JWT_TOKEN_HASH_ALGO
 
   # MongoDB Variables
-  mongo_DATABASE  = var.DATABASE
-  mongo_MONGO_DB  = var.MONGO_DB
+  mongo_DATABASE = var.DATABASE
+  mongo_MONGO_DB = var.MONGO_DB
 
   depends_on = [azurerm_resource_group.infra_rgs]
 }

@@ -33,7 +33,7 @@ env:
   TF_VAR_PORT: ${{ secrets.PORT }}
   TF_VAR_SECRET: ${{ secrets.SECRET }}
   TF_VAR_KEY: ${{ secrets.KEY }}
-  TF_VAR_KEY_JWT_SCHEME: ${{ secrets.KEY_JWT_SCHEME }}
+  TF_VAR_JWT_SCHEME: ${{ secrets.JWT_SCHEME }}
   TF_VAR_JWT_TOKEN_PREFIX: ${{ secrets.JWT_TOKEN_PREFIX }}
   TF_VAR_JWT_SECRET: ${{ secrets.JWT_SECRET }}
   TF_VAR_JWT_TOKEN_EXPIRATION: ${{ secrets.JWT_TOKEN_EXPIRATION }}
@@ -92,7 +92,7 @@ jobs:
           -var "PORT=${{ secrets.PORT }}" \
           -var "SECRET=${{ secrets.SECRET }}" \
           -var "KEY=${{ secrets.KEY }}" \
-          -var "KEY_JWT_SCHEME=${{ secrets.KEY_JWT_SCHEME }}" \
+          -var "JWT_SCHEME=${{ secrets.JWT_SCHEME }}" \
           -var "JWT_TOKEN_PREFIX=${{ secrets.JWT_TOKEN_PREFIX }}" \
           -var "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
           -var "JWT_TOKEN_EXPIRATION=${{ secrets.JWT_TOKEN_EXPIRATION }}" \
@@ -112,7 +112,7 @@ jobs:
           -var "PORT=${{ secrets.PORT }}" \
           -var "SECRET=${{ secrets.SECRET }}" \
           -var "KEY=${{ secrets.KEY }}" \
-          -var "KEY_JWT_SCHEME=${{ secrets.KEY_JWT_SCHEME }}" \
+          -var "JWT_SCHEME=${{ secrets.JWT_SCHEME }}" \
           -var "JWT_TOKEN_PREFIX=${{ secrets.JWT_TOKEN_PREFIX }}" \
           -var "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
           -var "JWT_TOKEN_EXPIRATION=${{ secrets.JWT_TOKEN_EXPIRATION }}" \

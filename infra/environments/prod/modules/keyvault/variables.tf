@@ -39,7 +39,7 @@ variable "backend_KEY" {
   sensitive   = true
 }
 
-variable "backend_KEY_JWT_SCHEME" {
+variable "backend_JWT_SCHEME" {
   description = "JWT scheme key used in backend authentication"
   type        = string
 }
