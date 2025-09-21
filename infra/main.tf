@@ -160,7 +160,7 @@ module "prod_acr" {
 
 ################################## PROD MONITORING ###############################################
 # module for monitoring the prod environment, currently commented out to save resources
-##############################################################################################
+##################################################################################################
 # module "prod_monitoring" {
 #   source       = "./environments/prod/modules/monitoring"
 #   cluster_name = module.prod_aks.aks_cluster_name
@@ -169,7 +169,7 @@ module "prod_acr" {
 #
 #   depends_on = [module.prod_aks, module.prod_acr, module.prod_keyvault, module.prod_networking, module.prod_security]
 # }
-################################## END PROD MONITORING ###############################################
+################################## END PROD MONITORING ###########################################
 
 
 
@@ -178,7 +178,7 @@ module "prod_acr" {
 
 ############################## STAGE ENVIRONMENT ###############################################
 # The stage environment is for staging, currently not in use as my subscription is limited to 4 cores
-##############################################################################################
+################################################################################################
 
 # module "stage_networking" {
 #   source      = "./environments/stage/modules/networking"
