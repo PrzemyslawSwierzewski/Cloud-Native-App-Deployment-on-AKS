@@ -245,4 +245,4 @@ module "prod_acr" {
 #   vault_id_output                  = module.stage_keyvault.vault_id_output
 
 #   depends_on = [azurerm_resource_group.infra_rgs, module.stage_keyvault]
-# }
+# } 
