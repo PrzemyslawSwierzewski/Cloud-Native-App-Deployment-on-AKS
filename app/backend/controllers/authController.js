@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
         id: admin._id,
       },
-      process.env.JWT-SECRET
+      process.env["JWT-SECRET"]
     );
 
     const result = await Admin.findOneAndUpdate(
@@ -129,7 +129,7 @@ exports.isValidToken = async (req, res, next) => {
         jwtExpired: true,
       });
 
-    const verified = jwt.verify(token, process.env.JWT-SECRET);
+    const verified = jwt.verify(token, process.env["JWT-SECRET"]);
     if (!verified)
       return res.status(401).json({
         success: false,
