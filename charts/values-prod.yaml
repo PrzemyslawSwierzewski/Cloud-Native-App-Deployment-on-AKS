@@ -147,8 +147,8 @@ secrets:
         data:
           - objectName: DATABASE
             key: DATABASE
-          - objectName: MONGO_DB
-            key: MONGO_DB
+          - objectName: MONGO-DB
+            key: MONGO-DB
       - secretName: backend-secret
         type: Opaque
         data:
