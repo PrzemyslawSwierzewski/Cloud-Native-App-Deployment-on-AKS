@@ -127,7 +127,7 @@ jobs:
           renderEngine: helm
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
-          overrides: frontend-deployment.image.repository=${{ env.FRONTEND_REPO }},frontend-deployment.image.tag=${{ env.IMAGE_TAG }},backend-deployment.image.repository=${{ env.BACKEND_REPO }},backend-deployment.image.tag=${{ env.IMAGE_TAG }},tenantId=${{ env.tenant_id }},keyvaultName=${{ env.key_vault_name }},userAssignedIdentityID=${{ env.user_assigned_identity_client_id }},Placeholder
+          overrides: frontend-deployment.image.repository=${{ env.FRONTEND_REPO }},frontend-deployment.image.tag=${{ env.IMAGE_TAG }},backend-deployment.image.repository=${{ env.BACKEND_REPO }},backend-deployment.image.tag=${{ env.IMAGE_TAG }},secrets.secretProviderClass.parameters.tenantId=${{ env.tenant_id }},secrets.secretProviderClass.parameters.keyvaultName=${{ env.key_vault_name }},secrets.secretProviderClass.parameters.userAssignedIdentityID=${{ env.user_assigned_identity_client_id }},Placeholder
           helm-version: latest
         id: bake
 
