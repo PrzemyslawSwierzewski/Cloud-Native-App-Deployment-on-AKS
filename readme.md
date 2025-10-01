@@ -177,5 +177,6 @@ This project includes a **dedicated Terraform module** for setting up **Azure-na
 - [x] Add monitoring with Prometheus + Grafana + Azure Monitor  
 - [ ] Configure Horizontal Pod Autoscaler (HPA)
 - [x] Move kubernetes secrets from manifest files to **Azure Key Vault**
+- [ ] Modular multi-environment Workflow setup  
 
 ---
