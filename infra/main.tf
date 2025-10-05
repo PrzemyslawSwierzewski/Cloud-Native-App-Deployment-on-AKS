@@ -177,7 +177,7 @@ module "prod_acr" {
 
 
 ############################## STAGE ENVIRONMENT ############################################### 
-# The stage environment is for staging, currently not in use as my subscription is limited to 4 cores
+# The stage environment is for staging, currently not in use as my subscription is limited to 4 cores .
 ################################################################################################
 
 # module "stage_networking" {
