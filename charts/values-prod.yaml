@@ -4,7 +4,7 @@ backend-deployment:
   name: backend
   replicaCount: 1
   image:
-    repository: prodcontainer.azurecr.io/backend
+    repository: prodcontainerr.azurecr.io/backend
     tag: latest
   resources:
     requests:
@@ -36,7 +36,7 @@ frontend-deployment:
   name: frontend
   replicaCount: 1
   image:
-    repository: prodcontainer.azurecr.io/frontend
+    repository: prodcontainerr.azurecr.io/frontend
     tag: latest
   resources:
     requests:

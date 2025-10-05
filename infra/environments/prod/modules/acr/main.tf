@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "prod_acr" {
-  name                    = "${var.environment.name}container"
+  name                    = "${var.environment.name}containerr"
   resource_group_name     = var.environment.rg_name
   location                = var.environment.location
   sku                     = var.acr_sku
