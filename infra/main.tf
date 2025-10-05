@@ -159,7 +159,7 @@ module "prod_acr" {
 }
 
 ################################## PROD MONITORING ###############################################
-# module for monitoring the prod environment, currently commented out to save resources
+# module for monitoring the prod environment, currently commented out to save resources 
 ##################################################################################################
 # module "prod_monitoring" {
 #   source       = "./environments/prod/modules/monitoring"
