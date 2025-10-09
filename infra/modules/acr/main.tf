@@ -1,4 +1,4 @@
-resource "azurerm_container_registry" "prod_acr" {
+resource "azurerm_container_registry" "cloud-native-acr" {
   name                    = "${var.environment.name}containerr"
   resource_group_name     = var.environment.rg_name
   location                = var.environment.location
@@ -18,11 +18,11 @@ resource "azurerm_container_registry" "prod_acr" {
     }
   }
 
-  depends_on = [azurerm_role_assignment.acr_keyvault_access]
+  depends_on = [azurerm_role_assignment.acr-keyvault-access]
 }
 
 
-resource "azurerm_role_assignment" "acr_keyvault_access" {
+resource "azurerm_role_assignment" "acr-keyvault-access" {
   scope                = var.vault_id_output
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = var.principal_id

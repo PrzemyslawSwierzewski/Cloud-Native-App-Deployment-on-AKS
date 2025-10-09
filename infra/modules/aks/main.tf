@@ -1,11 +1,11 @@
 resource "azurerm_role_assignment" "aks_mi_operator" {
   scope                = var.user_assigned_identity_id
   role_definition_name = "Managed Identity Operator"
-  principal_id         = var.principal_id # control plane principal_id (not from the cluster resource)
+  principal_id         = var.principal_id
 }
 
 
-resource "azurerm_kubernetes_cluster" "prod_cluster" {
+resource "azurerm_kubernetes_cluster" "cloud-native-cluster" {
   name                = "${var.environment.name}-aks"
   location            = var.environment.location
   resource_group_name = var.environment.rg_name
@@ -17,8 +17,8 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
     vm_size                     = var.default_node_pool.vm_size
     vnet_subnet_id              = var.subnet_id
     auto_scaling_enabled        = true
-    min_count                   = var.prod_aks_scaling_min_count
-    max_count                   = var.prod_aks_scaling_max_count
+    min_count                   = var.aks_scaling_min_count
+    max_count                   = var.aks_scaling_max_count
     temporary_name_for_rotation = "${var.environment.name}temp"
     zones                       = ["3"]
   }
