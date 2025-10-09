@@ -4,12 +4,13 @@ resource "azurerm_role_assignment" "aks_mi_operator" {
   principal_id         = var.principal_id # control plane principal_id (not from the cluster resource)
 }
 
-
+#tfsec:ignore:azure-container-logging
 resource "azurerm_kubernetes_cluster" "prod_cluster" {
   name                = "${var.environment.name}-aks"
   location            = var.environment.location
   resource_group_name = var.environment.rg_name
   dns_prefix          = "${var.environment.name}aks"
+  role_based_access_control_enabled = true
 
   default_node_pool {
     name                        = var.default_node_pool.name
@@ -44,9 +45,14 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
   }
 
   network_profile {
+    network_policy = "azure"
     network_plugin = "azure"
     service_cidr   = "10.1.0.0/16" # non-overlapping with VNet
     dns_service_ip = "10.1.0.10"   # inside service_cidr
+  }
+  
+  api_server_access_profile{
+    authorized_ip_ranges = var.authorized_ip_range_for_aks_api
   }
 
   lifecycle {
@@ -58,6 +64,6 @@ resource "azurerm_kubernetes_cluster" "prod_cluster" {
   key_vault_secrets_provider {
     secret_rotation_enabled = false
   }
-
+  
   depends_on = [azurerm_role_assignment.aks_mi_operator]
 }

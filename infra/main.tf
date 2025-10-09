@@ -106,6 +106,7 @@ module "prod_aks" {
   user_assigned_identity_id  = module.prod_identity.id
   prod_aks_scaling_min_count = var.aks_scaling.stage.min
   prod_aks_scaling_max_count = var.aks_scaling.stage.max
+  authorized_ip_range_for_aks_api  = var.authorized_ip_range_for_aks_api
   principal_id               = module.prod_identity.principal_id
   client_id                  = module.prod_identity.client_id
 

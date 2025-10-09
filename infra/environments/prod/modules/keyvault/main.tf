@@ -15,6 +15,13 @@ resource "azurerm_key_vault" "prodkeyvault" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = true
   rbac_authorization_enabled  = true
+  expiration_date  = var.key_vault_expiration_date
+  
+  network_acls {
+    default_action             = "Deny"
+    bypass                     = "AzureServices"
+    ip_rules                   = var.authorized_ip_range_for_kv
+  }
 
   sku_name = var.sku_name_key_vault
 
@@ -29,70 +36,93 @@ resource "azurerm_key_vault_key" "prod_key" {
   key_type     = "RSA"
   key_size     = 2048
   key_opts     = ["encrypt", "decrypt", "wrapKey", "unwrapKey"]
+  expiration_date  = var.key_vault_expiration_date
 }
 
 resource "azurerm_key_vault_secret" "backend_NODE_ENV" {
-  name         = "NODE-ENV"
-  value        = var.backend_NODE_ENV
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "NODE-ENV"
+  value            = var.backend_NODE_ENV
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "text/plain"
 }
 
 resource "azurerm_key_vault_secret" "backend_PORT" {
-  name         = "PORT"
-  value        = var.backend_PORT
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "PORT"
+  value            = var.backend_PORT
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "text/plain"
 }
 
 resource "azurerm_key_vault_secret" "backend_SECRET" {
-  name         = "SECRET"
-  value        = var.backend_SECRET
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "SECRET"
+  value            = var.backend_SECRET
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/jose"
 }
 
 resource "azurerm_key_vault_secret" "backend_KEY" {
-  name         = "KEY"
-  value        = var.backend_KEY
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "KEY"
+  value            = var.backend_KEY
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/jwk+json"
 }
 
 resource "azurerm_key_vault_secret" "backend_JWT_SCHEME" {
-  name         = "JWT-SCHEME"
-  value        = var.backend_JWT_SCHEME
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "JWT-SCHEME"
+  value            = var.backend_JWT_SCHEME
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "text/plain"
 }
 
 resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_PREFIX" {
-  name         = "JWT-TOKEN-PREFIX"
-  value        = var.backend_JWT_TOKEN_PREFIX
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "JWT-TOKEN-PREFIX"
+  value            = var.backend_JWT_TOKEN_PREFIX
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "text/plain"
 }
 
 resource "azurerm_key_vault_secret" "backend_JWT_SECRET" {
-  name         = "JWT-SECRET"
-  value        = var.backend_JWT_SECRET
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "JWT-SECRET"
+  value            = var.backend_JWT_SECRET
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/jose"
 }
 
 resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_EXPIRATION" {
-  name         = "JWT-TOKEN-EXPIRATION"
-  value        = var.backend_JWT_TOKEN_EXPIRATION
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "JWT-TOKEN-EXPIRATION"
+  value            = var.backend_JWT_TOKEN_EXPIRATION
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/IntDate"
 }
 
 resource "azurerm_key_vault_secret" "backend_JWT_TOKEN_HASH_ALGO" {
-  name         = "JWT-TOKEN-HASH-ALGO"
-  value        = var.backend_JWT_TOKEN_HASH_ALGO
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "JWT-TOKEN-HASH-ALGO"
+  value            = var.backend_JWT_TOKEN_HASH_ALGO
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/jose"
 }
 
 resource "azurerm_key_vault_secret" "mongo_DATABASE" {
-  name         = "DATABASE"
-  value        = var.mongo_DATABASE
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "DATABASE"
+  value            = var.mongo_DATABASE
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "text/plain"
 }
 
 resource "azurerm_key_vault_secret" "mongo_MONGO_DB" {
-  name         = "MONGO-DB"
-  value        = var.mongo_MONGO_DB
-  key_vault_id = azurerm_key_vault.prodkeyvault.id
+  name             = "MONGO-DB"
+  value            = var.mongo_MONGO_DB
+  key_vault_id     = azurerm_key_vault.prodkeyvault.id
+  expiration_date  = var.key_vault_expiration_date
+  content_type     = "application/json"
 }

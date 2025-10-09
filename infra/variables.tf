@@ -58,6 +58,11 @@ variable "aks_scaling" {
   }
 }
 
+variable "authorized_ip_range_for_aks_api" {
+  type        = list(string)
+  description = "List of IP ranges authorized to access the AKS cluster"
+}
+
 variable "owner_email_address" {
   type        = string
   description = "Email address of the resource owner"
