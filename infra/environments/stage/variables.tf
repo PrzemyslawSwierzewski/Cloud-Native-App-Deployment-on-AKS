@@ -18,7 +18,7 @@ variable "default_node_pools" {
   }))
 
   default = {
-    prod = {
+    stage = {
       name       = "nodepool"
       node_count = 1
       vm_size    = "standard_a4_v2"

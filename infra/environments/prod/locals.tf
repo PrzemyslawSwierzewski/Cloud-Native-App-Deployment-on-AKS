@@ -1,5 +1,5 @@
 locals {
-  environment = {
+  environments = {
     prod = {
       name     = "prod"
       rg_name  = "prod-cloud-native-rg"
