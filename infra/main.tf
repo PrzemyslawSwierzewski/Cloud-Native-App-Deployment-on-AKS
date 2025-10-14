@@ -27,9 +27,9 @@ module "dev" {
   KEY                  = var.KEY
   JWT_SCHEME           = var.JWT_SCHEME
   JWT_TOKEN_PREFIX     = var.JWT_TOKEN_PREFIX
-  JWT_SECRET                   = var.JWT_SECRET
-  JWT_TOKEN_EXPIRATION         = var.JWT_TOKEN_EXPIRATION
-  JWT_TOKEN_HASH_ALGO          = var.JWT_TOKEN_HASH_ALGO
+  JWT_SECRET           = var.JWT_SECRET
+  JWT_TOKEN_EXPIRATION = var.JWT_TOKEN_EXPIRATION
+  JWT_TOKEN_HASH_ALGO  = var.JWT_TOKEN_HASH_ALGO
 
   # MongoDB Variables
   DATABASE = var.DATABASE
