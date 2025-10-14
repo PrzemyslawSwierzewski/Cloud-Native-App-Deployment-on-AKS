@@ -1,3 +1,8 @@
+variable "owner_email_address" {
+  type        = string
+  description = "Email address of the resource owner"
+}
+
 variable "NODE_ENV" {
   description = "Node.js environment (e.g., production, development, staging)"
   type        = string
