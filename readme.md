@@ -1,4 +1,4 @@
-<img width="2195" height="1199" alt="diagram-export-9-18-2025-11_08_07-AM" src="https://github.com/user-attachments/assets/2bdbaaee-e70a-4a72-bc81-bb135bcf35cb" />
+<img width="8192" height="3015" alt="cloud native AKS app-2026-08-09-141436" src="https://github.com/user-attachments/assets/25c582cd-7080-4720-b141-56ea6e10f8ec" />
 
 ## Diagram above is focused on the production environment. I’ve left out staging and development to keep it clean :)
 ---
