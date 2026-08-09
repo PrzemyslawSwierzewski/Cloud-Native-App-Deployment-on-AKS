@@ -5,7 +5,7 @@
 
 ## 🌐 Cloud-Native Full-Stack Application on Azure AKS**
 
-This project demonstrates a **production-grade cloud-native setup** running on **Azure Kubernetes Service (AKS)**. It covers the full lifecycle from infrastructure provisioning to application deployment, using **Terraform, Helm, GitHub Actions CI/CD, and Azure-native services**.
+This project demonstrates a **production-grade cloud-native setup** running on **Azure Kubernetes Service (AKS)**. It covers the full lifecycle from infrastructure provisioning to application deployment, using **Terraform, Helm, GitHub Actions CI/CD, Flux CD GitOps, and Azure-native services**.
 
 ---
 
@@ -20,7 +20,11 @@ This project demonstrates a **production-grade cloud-native setup** running on *
 - **Containerization** with custom Dockerfiles, images pushed to Azure Container Registry (ACR).  
 - **CI/CD Pipelines** with GitHub Actions:  
   - **Infrastructure pipeline** → `terraform fmt`, validate, plan, security scan, and apply.  
-  - **Application pipeline** → build, push, scan, and deploy with Helm.  
+  - **Application pipeline** → build & push images to ACR.  
+- **GitOps with Flux CD**:  
+  - Declarative deployments from Git  
+  - Automatic image updates from ACR  
+  - Environment-based synchronization (dev, staging, prod)  
 - **Secrets management** with Azure Key Vault + Managed Identity.  
 - **Security** with RBAC, Key Vault role assignments, and ACR access controls.  
 - **Scalability & Resilience** with AKS autoscaling, HPA (planned).  
@@ -54,25 +58,38 @@ This project demonstrates a **production-grade cloud-native setup** running on *
     ├── values-dev.yaml
     ├── values-stage.yaml
     └── values-prod.yaml
+    flux/                     # Flux CD GitOps configuration
+    ├── sources/              # Git & Image repositories
+    ├── kustomization/        # Environment-specific deployments
+    ├── clusters/             # Bootstrap configs per cluster
+    ├── namespaces/           # Kubernetes namespaces
+    └── setup-*.sh            # Setup scripts for each environment
     infra/environments        # Infrastructure code (modular setup)
     ├── dev/
     ├── staging/
     └── prod/
     .github/workflows/        # CI/CD pipelines
-    ├── build-deploy.yaml     # App pipeline (Docker + Helm)
-    └── terraform.yaml        # Infra pipeline
+    ├── Build-deploy.yaml     # App pipeline (Docker build & push)
+    └── Terraform-workflow.yaml # Infra pipeline
 
 ---
 
-## ⚙️ CI/CD Pipelines
+## ⚙️ CI/CD & GitOps Pipelines
 
-### 🔹 Application Pipeline (`build-deploy.yaml`)
+### 🔹 Application Pipeline (`Build-deploy.yaml`)
 - Triggered on commits to `dev`, `staging`, or `main`.  
-- Builds and pushes frontend/backend images to ACR (tagged with commit SHA).  
-- Bakes Helm charts with environment-specific overrides.  
-- Deploys workloads to AKS.
+- Builds and pushes frontend/backend images to ACR (tagged with commit SHA and latest).  
+- Simple, efficient build-only pipeline (no deployment).
 
-### 🔹 Infrastructure Pipeline (`terraform.yaml`)
+### 🔹 GitOps Deployment (Flux CD)
+- Monitors Git branches and ACR for image updates.
+- **PROD** (main branch) → prodcontainerr ACR → prod-aks-cluster
+- **STAGING** (staging branch) → stagingcontainerr ACR → staging-aks-cluster  
+- **DEV** (dev branch) → devcontainerr ACR → dev-aks-cluster
+- Automatically syncs deployments when images are pushed or Git changes are made.
+- [See Flux CD Setup Guide](./docs/FLUX_SETUP.md)
+
+### 🔹 Infrastructure Pipeline (`Terraform-workflow.yaml`)
 - Triggered on changes to Terraform code.  
 - Runs `fmt`, `validate`, `plan`, security scan, and `apply`.  
 - Manages environment-specific resources via modules.
@@ -115,7 +132,7 @@ This project demonstrates a **production-grade cloud-native setup** running on *
        terraform init
        terraform apply
 ```
-5. Configure these secrets in GitHub to ensure the application functions correctly. They will be passed from the Terraform workflow to Azure Key Vault, and later to your Helm build.
+5. Configure these secrets in GitHub to ensure the application functions correctly. They will be passed from the Terraform workflow to Azure Key Vault, and later to Flux.
 ```bash
     NODE_ENV: "development"
     PORT: "4000"
@@ -129,13 +146,24 @@ This project demonstrates a **production-grade cloud-native setup** running on *
     DATABASE: "mongodb://mongo.default.svc.cluster.local:27017/mydb"
     MONGO_DB: "mydb"
 ```
-6. Build & push Docker images:
+6. Setup Flux CD on your AKS clusters:
 ```bash
-       Best option to build the images is to run the workflow
+       export GITHUB_TOKEN=<your-github-token>
+       bash flux/setup-prod.sh    # Setup PROD cluster
+       bash flux/setup-staging.sh # Setup STAGING cluster
+       bash flux/setup-dev.sh     # Setup DEV cluster
 ```
-7. Deploy with Helm:
+For detailed setup instructions, see [Flux CD Setup Guide](./docs/FLUX_SETUP.md)
+
+7. Push Docker images:
 ```bash
-       Best option to deploy the application is to run the workflow
+       Push commits to dev/staging/main branches to trigger GitHub Actions
+       Images are built and pushed to ACR automatically
+```
+8. Flux automatically deploys:
+```bash
+       Flux watches ACR and Git, deploying changes automatically to each AKS cluster
+       No manual kubectl apply or Helm deploy needed!
 ```
 ---
 
@@ -173,12 +201,13 @@ This project includes a **dedicated Terraform module** for setting up **Azure-na
 - [x] Modular multi-environment Terraform setup  
 - [x] Helm charts for app workloads  
 - [x] CI/CD pipelines for infra and app  
+- [x] GitOps with Flux CD for declarative deployments
 - [ ] Implement RBAC, NetworkPolicies, PodSecurity  
 - [x] Add monitoring with Prometheus + Grafana + Azure Monitor  
 - [ ] Configure Horizontal Pod Autoscaler (HPA)
 - [x] Move kubernetes secrets from manifest files to **Azure Key Vault**
-- [ ] Multi-environment Workflow setup
-- [ ] Security implementations with tfsec
+- [x] Multi-environment Workflow setup (dev, staging, prod)
+- [x] Security implementations with tfsec
 - [ ] Refactor the infrastructure structure so a single set of modules can be parameterized and shared across all environments, instead of maintaining separate modules per environment
 
 ---
