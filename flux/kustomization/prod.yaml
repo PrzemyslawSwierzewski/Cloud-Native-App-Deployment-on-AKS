@@ -1,0 +1,34 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-prod
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: app-repo
+    namespace: flux-system
+  path: ./charts/fullstack
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      namespace: default
+      FRONTEND_REPO: prodcontainerr.azurecr.io/frontend
+      BACKEND_REPO: prodcontainerr.azurecr.io/backend
+  patches:
+    - target:
+        kind: Deployment
+        name: frontend
+      patch: |-
+        - op: replace
+          path: /spec/template/spec/containers/0/image
+          value: prodcontainerr.azurecr.io/frontend:${FRONTEND_TAG}
+    - target:
+        kind: Deployment
+        name: backend
+      patch: |-
+        - op: replace
+          path: /spec/template/spec/containers/0/image
+          value: prodcontainerr.azurecr.io/backend:${BACKEND_TAG}

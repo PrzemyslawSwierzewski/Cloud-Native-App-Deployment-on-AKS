@@ -1,62 +1,46 @@
-name: Build & Deploy to AKS
+name: Build & Push to ACR
 
 on:
-  workflow_run:
-    workflows: ["Terraform workflow"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - staging
+      - dev
+    paths:
+      - 'app/**'
+      - '.github/workflows/Build-deploy.yml'
 
 env:
-  CHART_PATH: "./charts/fullstack"
+  REGISTRY: azurecr.io
+  FRONTEND_IMAGE: frontend
+  BACKEND_IMAGE: backend
 
 jobs:
-  set-env:
+  setup:
     runs-on: ubuntu-latest
     outputs:
-      ACR_NAME: ${{ steps.set-vars.outputs.ACR_NAME }}
-      AKS_NAME: ${{ steps.set-vars.outputs.AKS_NAME }}
-      RG_NAME: ${{ steps.set-vars.outputs.RG_NAME }}
-      CHART_OVERRIDE_PATH: ${{ steps.set-vars.outputs.CHART_OVERRIDE_PATH }}
-      key_vault_name: ${{ steps.set-vars.outputs.KEY_VAULT_NAME }}
-      user_assigned_identity_client_id: ${{ steps.set-vars.outputs.USER_ASSIGNED_IDENTITY_CLIENT_ID }}
-      tenant_id: ${{ steps.set-vars.outputs.TENANT_ID }}
+      acr_name: ${{ steps.vars.outputs.acr_name }}
+      acr_url: ${{ steps.vars.outputs.acr_url }}
     steps:
-      - id: set-vars
+      - id: vars
         run: |
-          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
-            echo "ACR_NAME=${{ vars.PROD_ACR_NAME }}" >> $GITHUB_OUTPUT
-            echo "AKS_NAME=${{ vars.PROD_AKS_NAME }}" >> $GITHUB_OUTPUT
-            echo "RG_NAME=${{ vars.PROD_RG_NAME }}" >> $GITHUB_OUTPUT
-            echo "CHART_OVERRIDE_PATH=./charts/values-prod.yaml" >> $GITHUB_OUTPUT
-            echo "KEY_VAULT_NAME=${{ vars.PROD_KEY_VAULT_NAME }}" >> $GITHUB_OUTPUT
-            echo "USER_ASSIGNED_IDENTITY_CLIENT_ID=${{ vars.PROD_USER_ASSIGNED_IDENTITY_CLIENT_ID }}" >> $GITHUB_OUTPUT
-            echo "TENANT_ID=${{ vars.TENANT_ID }}" >> $GITHUB_OUTPUT            
-          elif [[ "${GITHUB_REF##*/}" == "staging" ]]; then
-            echo "ACR_NAME=${{ vars.STAGING_ACR_NAME }}" >> $GITHUB_OUTPUT
-            echo "AKS_NAME=${{ vars.STAGING_AKS_NAME }}" >> $GITHUB_OUTPUT
-            echo "RG_NAME=${{ vars.STAGING_RG_NAME }}" >> $GITHUB_OUTPUT
-            echo "CHART_OVERRIDE_PATH=./charts/values-stage.yaml" >> $GITHUB_OUTPUT
-            echo "KEY_VAULT_NAME=${{ vars.STAGING_KEY_VAULT_NAME }}" >> $GITHUB_OUTPUT
-            echo "USER_ASSIGNED_IDENTITY_CLIENT_ID=${{ vars.STAGING_USER_ASSIGNED_IDENTITY_CLIENT_ID }}" >> $GITHUB_OUTPUT
-            echo "TENANT_ID=${{ vars.TENANT_ID }}" >> $GITHUB_OUTPUT         
-          elif [[ "${GITHUB_REF##*/}" == "dev" ]]; then
-            echo "ACR_NAME=${{ vars.DEV_ACR_NAME }}" >> $GITHUB_OUTPUT
-            echo "AKS_NAME=${{ vars.DEV_AKS_NAME }}" >> $GITHUB_OUTPUT
-            echo "RG_NAME=${{ vars.DEV_RG_NAME }}" >> $GITHUB_OUTPUT
-            echo "CHART_OVERRIDE_PATH=./charts/values-dev.yaml" >> $GITHUB_OUTPUT
-            echo "KEY_VAULT_NAME=${{ vars.DEV_KEY_VAULT_NAME }}" >> $GITHUB_OUTPUT
-            echo "USER_ASSIGNED_IDENTITY_CLIENT_ID=${{ vars.DEV_USER_ASSIGNED_IDENTITY_CLIENT_ID }}" >> $GITHUB_OUTPUT
-            echo "TENANT_ID=${{ vars.TENANT_ID }}" >> $GITHUB_OUTPUT         
-          else
-            echo "Unknown branch. Exiting."
-            exit 1
-          fi
+          case "${{ github.ref_name }}" in
+            main)
+              ACR_NAME="${{ vars.PROD_ACR_NAME }}"
+              ;;
+            staging)
+              ACR_NAME="${{ vars.STAGING_ACR_NAME }}"
+              ;;
+            dev)
+              ACR_NAME="${{ vars.DEV_ACR_NAME }}"
+              ;;
+          esac
+          echo "acr_name=${ACR_NAME}" >> $GITHUB_OUTPUT
+          echo "acr_url=${ACR_NAME}.azurecr.io" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
-    needs: set-env
-    env:
-      ACR_NAME: ${{ needs.set-env.outputs.ACR_NAME }}
+    needs: setup
     steps:
       - uses: actions/checkout@v4
 
@@ -66,76 +50,25 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Log in to ACR
-        run: az acr login --name ${{ env.ACR_NAME }}
+        run: az acr login --name ${{ needs.setup.outputs.acr_name }}
 
-      - name: Build & push frontend image
+      - name: Build & push frontend
         run: |
           cd app/frontend
-          IMAGE_TAG=${{ env.ACR_NAME }}.azurecr.io/frontend:${GITHUB_SHA}
-          docker build --build-arg REACT_APP_API_URL="/" -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
+          docker build \
+            --build-arg REACT_APP_API_URL="/" \
+            -t ${{ needs.setup.outputs.acr_url }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }} \
+            -t ${{ needs.setup.outputs.acr_url }}/${{ env.FRONTEND_IMAGE }}:latest \
+            .
+          docker push ${{ needs.setup.outputs.acr_url }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          docker push ${{ needs.setup.outputs.acr_url }}/${{ env.FRONTEND_IMAGE }}:latest
 
-      - name: Build & push backend image
+      - name: Build & push backend
         run: |
           cd app/backend
-          IMAGE_TAG=${{ env.ACR_NAME }}.azurecr.io/backend:${GITHUB_SHA}
-          docker build -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [set-env, build]
-    env:
-      ACR_NAME: ${{ needs.set-env.outputs.ACR_NAME }}
-      AKS_NAME: ${{ needs.set-env.outputs.AKS_NAME }}
-      RG_NAME: ${{ needs.set-env.outputs.RG_NAME }}
-      CHART_OVERRIDE_PATH: ${{ needs.set-env.outputs.CHART_OVERRIDE_PATH }}
-      key_vault_name: ${{ needs.set-env.outputs.key_vault_name }}
-      user_assigned_identity_client_id: ${{ needs.set-env.outputs.user_assigned_identity_client_id }}
-      tenant_id: ${{ needs.set-env.outputs.tenant_id }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Azure login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set up kubelogin
-        uses: azure/use-kubelogin@v1
-        with:
-          kubelogin-version: 'v0.0.25'
-
-      - name: Get K8s context
-        uses: azure/aks-set-context@v3
-        with:
-          resource-group: ${{ env.RG_NAME }}
-          cluster-name: ${{ env.AKS_NAME }}
-          admin: 'false'
-          use-kubelogin: 'true'
-
-      - name: Bake Helm chart
-        uses: azure/k8s-bake@v2
-        env:
-          FRONTEND_REPO: ${{ env.ACR_NAME }}.azurecr.io/frontend
-          BACKEND_REPO: ${{ env.ACR_NAME }}.azurecr.io/backend
-          IMAGE_TAG: ${{ github.sha }}
-          key_vault_name: ${{ needs.set-env.outputs.key_vault_name }}
-          user_assigned_identity_client_id: ${{ needs.set-env.outputs.user_assigned_identity_client_id }}
-          tenant_id: ${{ needs.set-env.outputs.tenant_id }}
-        with:
-          renderEngine: helm
-          helmChart: ${{ env.CHART_PATH }}
-          overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
-          overrides: frontend-deployment.image.repository=${{ env.FRONTEND_REPO }},frontend-deployment.image.tag=${{ env.IMAGE_TAG }},backend-deployment.image.repository=${{ env.BACKEND_REPO }},backend-deployment.image.tag=${{ env.IMAGE_TAG }},secrets.secretProviderClass.parameters.tenantId=${{ env.tenant_id }},secrets.secretProviderClass.parameters.keyvaultName=${{ env.key_vault_name }},secrets.secretProviderClass.parameters.userAssignedIdentityID=${{ env.user_assigned_identity_client_id }},Placeholder
-          helm-version: latest
-        id: bake
-
-      - name: Deploy application
-        uses: Azure/k8s-deploy@v4
-        with:
-          action: deploy
-          manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: |
-            ${{ env.FRONTEND_REPO }}:${{ env.IMAGE_TAG }}
-            ${{ env.BACKEND_REPO }}:${{ env.IMAGE_TAG }}
+          docker build \
+            -t ${{ needs.setup.outputs.acr_url }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }} \
+            -t ${{ needs.setup.outputs.acr_url }}/${{ env.BACKEND_IMAGE }}:latest \
+            .
+          docker push ${{ needs.setup.outputs.acr_url }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+          docker push ${{ needs.setup.outputs.acr_url }}/${{ env.BACKEND_IMAGE }}:latest

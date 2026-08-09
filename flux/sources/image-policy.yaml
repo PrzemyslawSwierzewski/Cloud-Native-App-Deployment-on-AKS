@@ -1,0 +1,152 @@
+# PROD Environment
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: prod-frontend-repo
+  namespace: flux-system
+spec:
+  image: prodcontainerr.azurecr.io/frontend
+  interval: 1m
+  secretRef:
+    name: prod-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: prod-frontend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: prod-frontend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: prod-backend-repo
+  namespace: flux-system
+spec:
+  image: prodcontainerr.azurecr.io/backend
+  interval: 1m
+  secretRef:
+    name: prod-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: prod-backend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: prod-backend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
+
+# STAGING Environment
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: staging-frontend-repo
+  namespace: flux-system
+spec:
+  image: stagingcontainerr.azurecr.io/frontend
+  interval: 1m
+  secretRef:
+    name: staging-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: staging-frontend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: staging-frontend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: staging-backend-repo
+  namespace: flux-system
+spec:
+  image: stagingcontainerr.azurecr.io/backend
+  interval: 1m
+  secretRef:
+    name: staging-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: staging-backend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: staging-backend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
+
+# DEV Environment
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: dev-frontend-repo
+  namespace: flux-system
+spec:
+  image: devcontainerr.azurecr.io/frontend
+  interval: 1m
+  secretRef:
+    name: dev-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: dev-frontend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: dev-frontend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: dev-backend-repo
+  namespace: flux-system
+spec:
+  image: devcontainerr.azurecr.io/backend
+  interval: 1m
+  secretRef:
+    name: dev-acr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: dev-backend-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: dev-backend-repo
+  policy:
+    semver:
+      range: '>=0.0.0'
